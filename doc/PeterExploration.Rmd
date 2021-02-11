@@ -1,0 +1,85 @@
+---
+title: "Untitled"
+author: "Peter Kwauk"
+date: "2/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+packages.used=as.list(
+  c(
+  "tidyverse",
+  "haven",
+  "devtools",
+  "RColorBrewer",
+  "data.table",
+  "ggplot2",
+  "dplyr", 
+  "RSocrata", 
+  "sf", 
+  "rgdal",
+  "leaflet",
+  "dplyr",
+  "ggmap")
+)
+check.pkg = function(x){
+  if(!require(x, character.only=T)) install.packages(x, 
+                                                     character.only=T,
+                                                     dependence=T)
+}
+lapply(packages.used, check.pkg)
+```
+
+
+Resturants would need permits to take up space for outdoor dining. Such outdoor dining would either be on the sidewalk or roadway. Different streets might allow for different seating arrangements depending on traffic and accessibility.
+
+First, lets look at the resturants with known coordinates (latitude and longitude)
+
+```{r Set Up Map}
+ny_resturant_map <- read.socrata("https://data.cityofnewyork.us/Transportation/Open-Restaurant-Applications/pitm-atqc")
+
+ny_resturant_map <- ny_resturant_map %>% drop_na_(vars = c("latitude", "longitude")) 
+
+leaflet(data = ny_resturant_map)  %>% addTiles() %>%
+  addCircleMarkers(lng = ~longitude, lat = ~latitude)
+
+```
+
+I have an error with my map, that I think has to do with the coordinates of latitude and longitude
+
+```{r}
+ny_resturant_map <- read.socrata("https://data.cityofnewyork.us/Transportation/Open-Restaurant-Applications/pitm-atqc")
+ny_resturant_map <- ny_resturant_map %>% drop_na_("latitude") %>%
+   drop_na_("longitude")
+ggmap(get_map(location = "New York City", 
+              maptype = "hybrid",
+              zoom=12, color = "bw")) + 
+  geom_point(data= ny_resturant_map, aes(x=longitude,y=latitude),  color='red')
+
+
+
+```
+
+
+
+## Separating Reesturants via type of Dining
+
+Since 
+
+```{r pressure, echo=FALSE}
+ny_resturants_sidewalk <- ny_resturant_map %>% filter(seating_interest_sidewalk == "sidewalk")
+ny_resturants_roadway <- ny_resturant_map %>% filter(seating_interest_sidewalk == "roadway")
+ny_resturants_both <- ny_resturant_map %>% filter(seating_interest_sidewalk == "both")
+
+ggmap(get_map(location = "New York City", 
+              maptype = "hybrid",
+              zoom=12, color = "bw")) + 
+  geom_point(data= ny_resturants_sidewalk, aes(x=longitude,y=latitude),  color='blue') +
+  geom_point(data= ny_resturants_roadway, aes(x=longitude,y=latitude),  color='green') +
+  geom_point(data= ny_resturants_both, aes(x=longitude,y=latitude),  color='red')
+
+
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
