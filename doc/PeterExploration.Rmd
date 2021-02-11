@@ -40,8 +40,13 @@ ny_resturant_map <- read.socrata("https://data.cityofnewyork.us/Transportation/O
 
 ny_resturant_map <- ny_resturant_map %>% drop_na_(vars = c("latitude", "longitude")) 
 
+pal <- colorFactor(topo.colors(3), ny_resturant_map$seating_interest_sidewalk)
+
 leaflet(data = ny_resturant_map)  %>% addTiles() %>%
-  addCircleMarkers(lng = ~longitude, lat = ~latitude)
+  addCircles(lng = ~longitude,
+                   lat = ~latitude, 
+                   label = ~seating_interest_sidewalk,
+                   color = ~pal(seating_interest_sidewalk))
 
 ```
 
@@ -51,7 +56,8 @@ I have an error with my map, that I think has to do with the coordinates of lati
 ny_resturant_map <- read.socrata("https://data.cityofnewyork.us/Transportation/Open-Restaurant-Applications/pitm-atqc")
 ny_resturant_map <- ny_resturant_map %>% drop_na_("latitude") %>%
    drop_na_("longitude")
-ggmap(get_map(location = "New York City", 
+
+ggmap::ggmap(ggmap::get_map(location = "New York City", 
               maptype = "hybrid",
               zoom=12, color = "bw")) + 
   geom_point(data= ny_resturant_map, aes(x=longitude,y=latitude),  color='red')
