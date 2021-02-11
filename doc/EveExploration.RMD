@@ -1,0 +1,103 @@
+---
+title: "Eve's Exploartory Analysis For Shiny App"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+## Set Up
+packages.used=as.list(
+  c(
+  "tidyverse",
+  "haven",
+  "devtools",
+  "RColorBrewer",
+  "data.table",
+  "ggplot2",
+  "dplyr", 
+  "RSocrata", 
+  "sf", 
+  "rgdal",
+  "leaflet")
+)
+
+check.pkg = function(x){
+  if(!require(x, character.only=T)) install.packages(x, 
+                                                     character.only=T,
+                                                     dependence=T)
+}
+
+lapply(packages.used, check.pkg)
+
+```
+
+# Open Street Data
+What is the NYC Open Street program? New York City is opening streets daily for pedestrians and cyclists to use the roadbed of the street for social distancing during the COVID-19 crisis.
+
+```{r}
+open_street <- read.socrata("https://data.cityofnewyork.us/Health/Open-Streets-Locations/uiay-nctu")
+
+open_street <- sf::st_as_sf(open_street, wkt = "the_geom")
+
+leaflet(data = open_street) %>%
+  addTiles() %>%
+  addPolygons(label = ~on_street)
+
+
+```
+
+Can Add fliters by Time and or Day of the Week, for example monday, after 7PM
+
+```{r}
+time = "7:00PM" #format H:MPM
+
+open_street %>% drop_na(monday_start) %>% 
+  filter(strptime(monday_start, "%I:%M%p") <= strptime("7:00PM", "%I:%M%p") )%>% 
+  filter(strptime(monday_end, "%I:%M%p") > strptime("7:00PM", "%I:%M%p") )%>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(label = ~on_street)
+```
+
+filter by neighborhood,  for example harlem
+```{r}
+open_street %>% filter(nhoodname == "Harlem") %>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(label = ~on_street)
+
+```
+
+
+
+# Resurants Data
+Outdoor dining!
+
+
+# Parks Data
+
+```{r}
+
+park_poly <- read.socrata("https://data.cityofnewyork.us/resource/y6ja-fw4f.json")
+
+park_poly <- sf::st_as_sf(park_poly, wkt = "the_geom.coorardinates")
+
+
+
+leaflet(data = park_poly) %>%
+  addTiles() %>%
+  addPolygons(label = ~PARK_NAME)
+
+
+```
+
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
