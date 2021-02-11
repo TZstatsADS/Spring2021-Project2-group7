@@ -1,13 +1,15 @@
 ---
 title: "Eve's Exploartory Analysis For Shiny App"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
-```{r}
+```{r load libraries, warning=FALSE, message=FALSE, include=FALSE}
 ## Set Up
 packages.used=as.list(
   c(
@@ -37,7 +39,7 @@ lapply(packages.used, check.pkg)
 # Open Street Data
 What is the NYC Open Street program? New York City is opening streets daily for pedestrians and cyclists to use the roadbed of the street for social distancing during the COVID-19 crisis.
 
-```{r}
+```{r, warning=FALSE}
 open_street <- read.socrata("https://data.cityofnewyork.us/Health/Open-Streets-Locations/uiay-nctu")
 
 open_street <- sf::st_as_sf(open_street, wkt = "the_geom")
@@ -46,12 +48,11 @@ leaflet(data = open_street) %>%
   addTiles() %>%
   addPolygons(label = ~on_street)
 
-
 ```
 
-Can Add fliters by Time and or Day of the Week, for example monday, after 7PM
+We can Add filters by Time and or Day of the Week, for example lets see whats open on Mondays after 7PM
 
-```{r}
+```{r, warning=FALSE}
 time = "7:00PM" #format H:MPM
 
 open_street %>% drop_na(monday_start) %>% 
@@ -62,7 +63,7 @@ open_street %>% drop_na(monday_start) %>%
   addPolygons(label = ~on_street)
 ```
 
-filter by neighborhood,  for example harlem
+Or we can filter by neighborhood, for example lets see what is open in Harlem
 ```{r}
 open_street %>% filter(nhoodname == "Harlem") %>%
   leaflet() %>%
@@ -72,32 +73,45 @@ open_street %>% filter(nhoodname == "Harlem") %>%
 ```
 
 
-
-# Resurants Data
-Outdoor dining!
-
-
 # Parks Data
 
-```{r}
 
-park_poly <- read.socrata("https://data.cityofnewyork.us/resource/y6ja-fw4f.json")
+Lets make the park polygons first!
+```{r, warning=FALSE}
+park_poly <- read.socrata("https://data.cityofnewyork.us/dataset/Social-Distancing-Park-Areas/4iha-m5jk")
 
-park_poly <- sf::st_as_sf(park_poly, wkt = "the_geom.coorardinates")
-
+park_poly <- sf::st_as_sf( park_poly, wkt = "multipolygon")
 
 
 leaflet(data = park_poly) %>%
   addTiles() %>%
-  addPolygons(label = ~PARK_NAME)
+  addPolygons(label = ~park_area_desc)
 
+
+```
+This is all the parks in NYC that where a part of a social distancing monitoring efforts. Lets Colorcode each park are by the number of violations, yellow being the least amount of partons spotted violating social distancing, red being the most, and gray being none!
+
+(changed the base map so it would be more legible) 
+```{r, warning=FALSE}
+violations <-  read.socrata("https://data.cityofnewyork.us/dataset/Social-Distancing-Parks-Crowds-Data/gyrw-gvqc") %>%
+  group_by(park_area_id) %>% 
+  summarise(patrons = sum(patroncount))
+
+parks_with_p <- merge(park_poly,violations,by="park_area_id", all.x=TRUE)
+
+bins <- c(0, 10, 25, 50, 100, 200, 400, 800, Inf)
+pal <- colorBin("YlOrRd", domain = parks_with_p$patrons, bins = bins)
+
+leaflet(data = parks_with_p) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(label = ~patrons, 
+              fillColor = ~pal(patrons),
+              weight = .5,
+              opacity = 5,
+              color = "white",
+              dashArray = "3",
+              fillOpacity = 0.7)
 
 ```
 
 
-
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
-
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
-
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
