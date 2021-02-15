@@ -1,0 +1,39 @@
+
+
+```{r}
+library(tidyverse)
+library(ggmap)
+library(dplyr)
+library(RSocrata)
+library(leaflet)
+
+data1 <- read_csv("data/Modified_Zip_Code_Tabulation_Areas__MODZCTA_.csv")
+data2 <- read_csv("data/last7days-by-modzcta.csv")
+data1 <- subset(data1, 10000<MODZCTA & MODZCTA<11698)
+covid <- cbind(data1, data2) %>% sf::st_as_sf(wkt = "the_geom")
+
+bins <- c(0, 10, 20, 50, 100, 150, 200, 250, 300, Inf)
+pal <- colorBin("YlOrRd", domain = covid$people_positive, bins = bins)
+labels <- sprintf(
+  "Zip: <strong>%s</strong><br/>%g people tested positive",
+  covid$MODZCTA, covid$people_positive
+) %>% lapply(htmltools::HTML)
+
+leaflet(data = covid) %>%
+  addTiles() %>%
+  addPolygons(fillOpacity = 0.9, weight = 2, opacity = 1, color = 'white', dashArray = '3',
+              fillColor = ~pal(people_positive), 
+              highlight = highlightOptions(
+                weight = 5,
+                color = "#666",
+                dashArray = "",
+                fillOpacity = 1,
+                bringToFront = TRUE),
+              label = labels,
+              labelOptions = labelOptions(
+                style = list("font-weight" = "normal", padding = "3px 8px"),
+                textsize = "15px",
+                direction = "auto")) %>%
+  addLegend(pal = pal, values = ~people_positive, opacity = 1.0)
+
+```
