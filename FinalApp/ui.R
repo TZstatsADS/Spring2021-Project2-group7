@@ -12,7 +12,7 @@ library(shinythemes)
 
 # Define UI for application that draws a histogram
 shinyUI(
-    navbarPage(theme = shinytheme("journal"), "Get Outside NYC!",
+    navbarPage(theme = shinytheme("journal"), "Get Outside NYC",
                navbarMenu("About", 
                         tabPanel("Outdoor Activites",
                                     h1("Safe Outdoor Activites during COVID-19"),
@@ -55,8 +55,26 @@ shinyUI(
                           tabPanel("Map"),
                           tabPanel("Database")),
                tabPanel("Open Streets"),
-               tabPanel("Parks")
+               tabPanel("Parks", 
+                        fillPage(
+                            tags$style(type = "text/css", "html, body {width:100%; height:100%}"),
+                            
+                            #leaflet not generation for some reason
+                            leafletOutput("parkmap", width = "100%", height = "100%"),
+                            absolutePanel(fixed = TRUE, class = "panel panel-default", draggable = TRUE, top = 30, left = "auto", 
+                                          right = 10, bottom = "auto", width = 330, height = "auto",
+                                          span(tags$i(h4("Select Parks by Borough"))),
+                                          checkboxGroupInput("Borough", "Which boroughs are you interested in?",
+                                                             choices = c("Manhattan", "Brooklyn", "Bronx",
+                                                                         "Queens", "Staten Island"),
+                                                             selected = c("Manhattan", "Brooklyn", "Bronx",
+                                                                          "Queens", "Staten Island")), 
+                                          span(tags$i(h4("Click on a Park to See the Amount Of Social Distacing Patrons Over Time"))),
+                                          plotOutput("time_reports", height=200)
+                            )
+                        )), 
+                        
+               tabPanel("COVID-19 Overview")
                
                
-    )
-)
+    ))
