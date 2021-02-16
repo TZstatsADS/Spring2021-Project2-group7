@@ -8,11 +8,11 @@
 #
 
 library(shiny)
+library(shinythemes)
 
 # Define UI for application that draws a histogram
 shinyUI(
-    
-    navbarPage("Get Outside!",
+    navbarPage(theme = shinytheme("journal"), "Get Outside NYC!",
                navbarMenu("About", 
                         tabPanel("Outdoor Activites",
                                     h1("Safe Outdoor Activites during COVID-19"),
@@ -32,9 +32,11 @@ shinyUI(
                                          p("There are three reliable types places you can go and gather in outside in New York City"),
                                     
                                     h3("Outdoor Dining"),
+                                        p("@peter"),
                                     
                                     h3("Open Streets"),
-                                    
+                                        p("@chuyun"),
+                                 
                                     h3("Parks"), 
                                          p("Parks can be a great place for a variety of activities, to name a few:" ),
                                          
