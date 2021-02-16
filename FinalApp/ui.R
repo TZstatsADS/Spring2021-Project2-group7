@@ -48,11 +48,50 @@ shinyUI(
                                  
                                 ),
                         tabPanel("Data and Sources")
-               
+                            
                         ),
                
                navbarMenu("Resturants",
-                          tabPanel("Map"),
+                          tabPanel("Map", 
+                                   fluidPage(
+                                       
+                                       # Application title
+                                       titlePanel("Map of NYC Resturants"),
+                                       
+                                       mainPanel(leafletOutput("foodmap")),
+                                       #Create master panel with different widgets for specification
+                                       absolutePanel(id = "controls", class = "panel panel-default", 
+                                                     fixed = TRUE, draggable = TRUE,
+                                                     top = 80, left = 600, 
+                                                     right = "auto", bottom = "auto", 
+                                                     width = 300, height = "auto",
+                                                     
+                                                     #Widget that chooses which area of dining to look at
+                                                     
+                                                     span(tags$i(h4("Select Dining Capacity by Type of Seating"))),
+                                                     selectInput("Category", 
+                                                                 "Which type of seating are you interested in?",
+                                                                 choices = c("Sidewalk" = "sidewalk_dimensions_area",
+                                                                             "Roadway" = "roadway_dimensions_area",
+                                                                             "Total" = "total_dining_area"),
+                                                     ),
+                                                     
+                                                     #Widget that filters restaurants by borough (can select multiple)
+                                                     span(tags$i(h4("Select Restaurants by Borough"))),
+                                                     checkboxGroupInput("Borough", "Which boroughs are you interested in?",
+                                                                        choices = c("Manhattan", "Brooklyn", "Bronx",
+                                                                                    "Queens", "Staten Island"),
+                                                                        selected = c("Manhattan", "Brooklyn", "Bronx",
+                                                                                     "Queens", "Staten Island")),
+                                                     
+                                                     #Widget that filters restaurants by alcohol availibility
+                                                     span(tags$i(h4("Select Restaurants by Alcohol License Status"))),
+                                                     checkboxGroupInput("Alcohol", "Can alcohol be served here?",
+                                                                        choices = c("yes", "no"),
+                                                                        selected = c("yes", "no")
+                                                     )
+                                       )
+                                   )),
                           tabPanel("Database")),
                tabPanel("Open Streets"),
                tabPanel("Parks", 
@@ -74,7 +113,22 @@ shinyUI(
                             )
                         )), 
                         
-               tabPanel("COVID-19 Overview")
+               tabPanel("COVID-19 Overview", 
+                        fluidPage(
+                            titlePanel("Map of NYC COVID-19 Data"),
+                            
+                            
+                            mainPanel(
+                                tabsetPanel(
+                                    tabPanel("7-Days Positive", leafletOutput("recent_map")), 
+                                    tabPanel("Total Positive", leafletOutput("total_map")), 
+                                    tabPanel("Antibody", leafletOutput("antibody_map"))
+                                )
+                            )   
+                        
+                        )
+               )
                
                
-    ))
+        )
+    )
