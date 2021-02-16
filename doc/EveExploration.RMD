@@ -104,14 +104,17 @@ pal <- colorBin("YlOrRd", domain = parks_with_p$patrons, bins = bins)
 
 leaflet(data = parks_with_p) %>%
   addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(label = ~patrons, 
+  addPolygons(label = ~~park_area_desc, 
               fillColor = ~pal(patrons),
               weight = .5,
               opacity = 5,
               color = "white",
               dashArray = "3",
-              fillOpacity = 0.7)
-
+              fillOpacity = 0.7) %>%
+  addLegend("bottomright", pal = pal, values = ~patrons,
+    title = "Number of Patrons Violating Social Distancing ",
+    opacity = 1
+  )
 ```
 
 
