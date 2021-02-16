@@ -18,13 +18,15 @@ vars <- c(
 )
 
 
-fluidPage(
-  leafletOutput("mymap"),
-  absolutePanel(top = 10, right = 10,
-                sliderInput("range", "Date of Social Distancing Violation", 
-                            min(violations$encounter_timestamp), max(violations$encounter_timestamp),
-                            value = range(violations$encounter_timestamp)
-                ),
+fillPage(
+  tags$style(type = "text/css", "html, body {width:100%; height:100%}"),
+  leafletOutput("mymap", width = "100%", height = "100%"),
+  absolutePanel(fixed = TRUE, class = "panel panel-default", draggable = TRUE, top = 10, left = "auto", 
+                right = 10, bottom = "auto", width = 330, height = "auto",
+                # sliderInput("range", "Date of Social Distancing Violation", 
+                #             min(violations$encounter_timestamp), max(violations$encounter_timestamp),
+                #             value = range(violations$encounter_timestamp)
+                # ),
                 span(tags$i(h4("Select Parks by Borough"))),
                 checkboxGroupInput("Borough", "Which boroughs are you interested in?",
                                    choices = c("Manhattan", "Brooklyn", "Bronx",

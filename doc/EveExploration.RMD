@@ -94,7 +94,7 @@ This is all the parks in NYC that where a part of a social distancing monitoring
 (changed the base map so it would be more legible) 
 ```{r, warning=FALSE}
 violations <-  read.socrata("https://data.cityofnewyork.us/dataset/Social-Distancing-Parks-Crowds-Data/gyrw-gvqc") %>%
-  group_by(park_area_id) %>% 
+  group_by(park_area_id, encounter_timestamp) %>% 
   summarise(patrons = sum(patroncount))
 
 parks_with_p <- merge(park_poly,violations,by="park_area_id", all.x=TRUE)

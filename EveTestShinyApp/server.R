@@ -34,48 +34,45 @@ lapply(packages.used, check.pkg)
 
 #Data initialization
 
-park_poly <- read.socrata("https://data.cityofnewyork.us/dataset/Social-Distancing-Park-Areas/4iha-m5jk")
-
-park_poly <- sf::st_as_sf( park_poly, wkt = "multipolygon")
-
-violations <-  read.socrata("https://data.cityofnewyork.us/dataset/Social-Distancing-Parks-Crowds-Data/gyrw-gvqc") %>%
-  group_by(park_area_id, encounter_timestamp) %>% 
-  summarise(patrons = sum(patroncount))
-
-parks_with_p <- merge(park_poly,violations,by="park_area_id", all.x=TRUE)
-
-bins <- c(0, 10, 25, 50, 100, 200, 400, 800, Inf)
-pal <- colorBin("YlOrRd", domain = parks_with_p$patrons, bins = bins)
+# park_poly <- read.socrata("https://data.cityofnewyork.us/dataset/Social-Distancing-Park-Areas/4iha-m5jk")
+# 
+# park_poly <- sf::st_as_sf( park_poly, wkt = "multipolygon")
+# 
+# violations <-  read.socrata("https://data.cityofnewyork.us/dataset/Social-Distancing-Parks-Crowds-Data/gyrw-gvqc") %>%
+#   group_by(park_area_id, encounter_timestamp) %>% 
+#   summarise(patrons = sum(patroncount))
+# 
+# parks_with_p <- merge(park_poly,violations,by="park_area_id", all.x=TRUE)
+# 
+# bins <- c(0, 10, 25, 50, 100, 200, 400, 800, Inf)
+# pal <- colorBin("YlOrRd", domain = parks_with_p$patrons, bins = bins)
 
 
 #shiny vibes
 function(input, output, session) {
   #make it move
-  filteredData <- reactive({ parks_with_p[
-    which(
-      parks_with_p$park_borough %in% input$Borough &
-      parks_with_p$encounter_timestamp >= input$range[1] &
-      parks_with_p$encounter_timestamp <= input$range[2]
-      )
-    ]
-  })
+  filteredData <- reactive(parks_with_p %>%
+      filter(parks_with_p$park_borough %in% input$Borough) # %>% 
+      # filter(strptime(parks_with_p$encounter_timestamp, "%Y-%m-%d %H:%M:%-S") >= strptime(input$range[1],  "%Y-%m-%d %H:%M:%-S")) %>%
+      # filter(strptime(parks_with_p$encounter_timestamp, "%Y-%m-%d %H:%M:%-S") <= strptime(input$range[2], "%Y-%m-%d %H:%M:%-S"))
+  )
+  
   
   # Create the map
   output$mymap <- renderLeaflet({
-    leaflet() %>%
+    leaflet(filteredData()) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
-      addPolygons(data = filteredData()$geometry,
-                  label = ~filteredData()$park_area_desc, 
-                  fillColor = ~pal(filteredData()$patrons),
+      addPolygons(label = ~park_area_desc,
+                  fillColor = ~pal(patrons),
                   weight = .5,
                   opacity = 5,
                   color = "white",
                   dashArray = "3",
-                  fillOpacity = 0.7) #%>%
-      # addLegend("bottomright", pal = pal, values = ~patrons,
-      #           title = "Number of Patrons Violating Social Distancing ",
-      #           opacity = 1
-      #)
+                  fillOpacity = 0.7) %>%
+      addLegend("bottomright", pal = pal, values = ~patrons,
+                title = "Number of Patrons Violating Social Distancing ",
+                opacity = 1
+      )
   })
   
   
