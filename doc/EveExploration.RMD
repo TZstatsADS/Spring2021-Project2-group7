@@ -118,3 +118,30 @@ leaflet(data = parks_with_p) %>%
 ```
 
 
+```{r}
+
+ambassabors <- read.socrata("https://data.cityofnewyork.us/City-Government/Social-Distancing-Citywide-Ambassador-Data/akzx-fghb") %>%
+  group_by(park_area_id, encounter_datetime) %>% 
+  summarise(patrons = as.integer(sum(sd_patronscomplied) + sd(sd_patronsnocomply))) %>% 
+  drop_na(patrons)
+
+all_violations <- merge(ambassabors,violations,by.x = c("patrons", "park_area_id", "encounter_datetime"), by.y = c("patrons", "park_area_id","encounter_timestamp"), all=TRUE)
+
+all_parks_with_p <- merge(park_poly,all_violations,by="park_area_id", all.x=TRUE)
+
+leaflet(data = all_parks_with_p) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(label = ~~park_area_desc, 
+              fillColor = ~pal(patrons),
+              weight = .5,
+              opacity = 5,
+              color = "white",
+              dashArray = "3",
+              fillOpacity = 0.7) %>%
+  addLegend("bottomright", pal = pal, values = ~patrons,
+    title = "Number of Patrons Violating Social Distancing ",
+    opacity = 1
+  )
+
+```
+

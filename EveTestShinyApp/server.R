@@ -51,8 +51,8 @@ lapply(packages.used, check.pkg)
 #shiny vibes
 function(input, output, session) {
   #make it move
-  filteredData <- reactive(parks_with_p %>%
-      filter(parks_with_p$park_borough %in% input$Borough) # %>% 
+  filteredData <- reactive(all_parks_with_p %>%
+      filter(park_borough %in% input$Borough) # %>% 
       # filter(strptime(parks_with_p$encounter_timestamp, "%Y-%m-%d %H:%M:%-S") >= strptime(input$range[1],  "%Y-%m-%d %H:%M:%-S")) %>%
       # filter(strptime(parks_with_p$encounter_timestamp, "%Y-%m-%d %H:%M:%-S") <= strptime(input$range[2], "%Y-%m-%d %H:%M:%-S"))
   )
