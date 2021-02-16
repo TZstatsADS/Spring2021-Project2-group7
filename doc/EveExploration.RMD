@@ -23,7 +23,8 @@ packages.used=as.list(
   "RSocrata", 
   "sf", 
   "rgdal",
-  "leaflet")
+  "leaflet", 
+  "anytime")
 )
 
 check.pkg = function(x){
@@ -129,6 +130,8 @@ all_violations <- merge(ambassabors,violations,by.x = c("patrons", "park_area_id
 
 all_parks_with_p <- merge(park_poly,all_violations,by="park_area_id", all.x=TRUE)
 
+all_parks_with_p$encounter_datetime <- anytime::anydate(all_parks_with_p$encounter_datetime)
+
 leaflet(data = all_parks_with_p) %>%
   addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(label = ~~park_area_desc, 
@@ -142,6 +145,19 @@ leaflet(data = all_parks_with_p) %>%
     title = "Number of Patrons Violating Social Distancing ",
     opacity = 1
   )
+
+```
+```{r}
+
+all_parks_with_p$encounter_datetime <- anytime::anydate(all_parks_with_p$encounter_datetime)
+
+all_parks_with_p %>% filter(encounter_datetime < Sys.Date()) %>%
+  ggplot() +
+    geom_line(aes(y=patrons, x=encounter_datetime))+
+    scale_x_date(date_labels = "%Y %b %d") +
+    ggtitle("Number of Social Distancing Violations (All)") +
+     xlab("Date of Observation") + ylab("Number of Patrons Observed")
+
 
 ```
 

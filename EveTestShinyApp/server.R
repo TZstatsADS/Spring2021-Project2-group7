@@ -52,7 +52,8 @@ lapply(packages.used, check.pkg)
 function(input, output, session) {
   #make it move
   filteredData <- reactive(all_parks_with_p %>%
-      filter(park_borough %in% input$Borough) # %>% 
+      filter(park_borough %in% input$Borough) %>% 
+      filter(encounter_datetime < Sys.Date() | is.na(encounter_datetime))# %>% 
       # filter(strptime(parks_with_p$encounter_timestamp, "%Y-%m-%d %H:%M:%-S") >= strptime(input$range[1],  "%Y-%m-%d %H:%M:%-S")) %>%
       # filter(strptime(parks_with_p$encounter_timestamp, "%Y-%m-%d %H:%M:%-S") <= strptime(input$range[2], "%Y-%m-%d %H:%M:%-S"))
   )
@@ -68,11 +69,36 @@ function(input, output, session) {
                   opacity = 5,
                   color = "white",
                   dashArray = "3",
-                  fillOpacity = 0.7) %>%
+                  fillOpacity = 0.7,
+                  layerId = ~park_area_desc) %>%
       addLegend("bottomright", pal = pal, values = ~patrons,
                 title = "Number of Patrons Violating Social Distancing ",
                 opacity = 1
       )
+  })
+  
+  output$time_reports <- renderPlot(
+    filteredData()  %>%
+      ggplot(aes(y=patrons, x=encounter_datetime)) +
+      geom_line()+
+      geom_point()+
+      scale_x_date(date_labels = "%Y %b %d") +
+      ggtitle("All") +
+      xlab("Date of Observation") + ylab("Number of Patrons Observed"))
+  
+  observeEvent(input$mymap_shape_click, {
+    event <- input$mymap_shape_click
+    output$time_reports <- renderPlot(
+      all_parks_with_p %>% filter(encounter_datetime < Sys.Date()) %>%
+        filter(park_area_desc == event$id) %>%
+        ggplot(aes(y=patrons, x=encounter_datetime)) +
+        geom_line()+
+        geom_point()+
+        scale_x_date(date_labels = "%Y %b %d") +
+        ggtitle(event$id) +
+        xlab("Date of Observation") + ylab("Number of Patrons Observed")
+      )
+
   })
   
   

@@ -18,7 +18,7 @@ vars <- c(
 )
 
 
-fillPage(
+shinyUI(fillPage(
   tags$style(type = "text/css", "html, body {width:100%; height:100%}"),
   leafletOutput("mymap", width = "100%", height = "100%"),
   absolutePanel(fixed = TRUE, class = "panel panel-default", draggable = TRUE, top = 10, left = "auto", 
@@ -32,6 +32,8 @@ fillPage(
                                    choices = c("Manhattan", "Brooklyn", "Bronx",
                                                "Queens", "Staten Island"),
                                    selected = c("Manhattan", "Brooklyn", "Bronx",
-                                                "Queens", "Staten Island"))
+                                                "Queens", "Staten Island")), 
+                span(tags$i(h4("Click on a Park to See the Amount Of Social Distacing Patrons Over Time"))),
+                plotOutput("time_reports", height=200)
    )
-)
+))
