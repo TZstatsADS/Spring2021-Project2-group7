@@ -80,8 +80,7 @@ function(input, output, session) {
   output$time_reports <- renderPlot(
     filteredData()  %>%
       ggplot(aes(y=patrons, x=encounter_datetime)) +
-      geom_line()+
-      geom_point()+
+      geom_col()+
       scale_x_date(date_labels = "%Y %b %d") +
       ggtitle("All") +
       xlab("Date of Observation") + ylab("Number of Patrons Observed"))
@@ -92,8 +91,7 @@ function(input, output, session) {
       all_parks_with_p %>% filter(encounter_datetime < Sys.Date()) %>%
         filter(park_area_desc == event$id) %>%
         ggplot(aes(y=patrons, x=encounter_datetime)) +
-        geom_line()+
-        geom_point()+
+        geom_col()+
         scale_x_date(date_labels = "%Y %b %d") +
         ggtitle(event$id) +
         xlab("Date of Observation") + ylab("Number of Patrons Observed")
