@@ -1,12 +1,10 @@
 
-```{r}
 library(tidyverse)
 library(ggmap)
 library(dplyr)
 library(RSocrata)
 library(leaflet)
 
-```
 
 #Shiny App Server
 
@@ -122,3 +120,7 @@ ui <- fluidPage(
       )
     )
   )
+
+#run
+shinyApp(ui = ui, server = server)
+
