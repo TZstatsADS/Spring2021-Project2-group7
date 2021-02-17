@@ -44,28 +44,46 @@ shinyServer(function(input, output) {
     #Restaurants ---------------------------------------------------------------------------------------------
     #Get dataset to use map
     
-    ny_restaurant_map <- ny_restaurant_map %>% 
-        drop_na_(vars = c("latitude", "longitude")) %>% 
-        mutate(seating_interest_sidewalk =  recode(seating_interest_sidewalk,
-                                                   "both" = "both sidewalk and roadway")) %>%
-        mutate(total_dining_area = replace_na(sidewalk_dimensions_area, 0) + 
-                   replace_na(roadway_dimensions_area, 0) ) %>%
-        pivot_longer(cols = ends_with("area"), names_to = "category",
-                     values_to = "area") %>%
-        drop_na_("area") 
-    ny_restaurant_map <- left_join(ny_restaurant_map, covid_res, c('zip' = 'modzcta'))
-    ny_restaurant_map %>% drop_na_("people_positive")
+    ny_restaurant_map2 <- ny_restaurant_map %>% 
+      drop_na_(vars = c("latitude", "longitude")) %>% 
+      mutate(seating_interest_sidewalk =  recode(seating_interest_sidewalk,
+                                                 "both" = "both sidewalk and roadway",
+                                                 "openstreets" = "no seating")) %>%
+      mutate(total_dining_area = replace_na(sidewalk_dimensions_area, 0) + 
+               replace_na(roadway_dimensions_area, 0) ) %>%
+      pivot_longer(cols = ends_with("area"), names_to = "category",
+                   values_to = "area") %>%
+      drop_na_("area") 
+    
+    ny_restaurant_map2 <- left_join(ny_restaurant_map2, covid_res, c('zip' = 'modzcta'))
+    
+    
+    ny_restaurant_table <- ny_restaurant_map %>% 
+      mutate(seating_interest_sidewalk =  recode(seating_interest_sidewalk,
+                                                 "both" = "both sidewalk and roadway",
+                                                 "openstreets" = "no seating")) %>%
+      mutate(total_dining_area = replace_na(sidewalk_dimensions_area, 0) + 
+               replace_na(roadway_dimensions_area, 0))  %>% 
+      select(restaurant_name, business_address, borough, 
+             qualify_alcohol, seating_interest_sidewalk, healthcompliance_terms,
+             sidewalk_dimensions_area, roadway_dimensions_area, total_dining_area) %>%
+      rename(Name = restaurant_name, Address = business_address, Borough = borough,
+             "Type of Seating" = seating_interest_sidewalk, Alcohol = qualify_alcohol,
+             "Health Compliance" = healthcompliance_terms, "Sidewalk Dining Area" = sidewalk_dimensions_area,
+             "Roadway Dining Area" = roadway_dimensions_area, "Total Dining Area" = total_dining_area)
 
+    
     bins <- c(0, 200, 400, 600, 1000, 2000, 4000, 8000, 20000, 60000)
     pal <- colorBin(c("red", "orange", "yellow", "green", "blue", 
                       "purple", "violet", "brown", "gray", "black"),
                     domain = NULL, bins = bins)
     
     #Allow dataset to be manipulated by the shiny app ui
-    shiny_restaurants <- reactive(ny_restaurant_map[
-        which(ny_restaurant_map$category %in% input$Category &
-                  ny_restaurant_map$borough %in% input$Borough &
-                  ny_restaurant_map$qualify_alcohol %in% input$Alcohol),])
+    shiny_restaurants <- reactive(ny_restaurant_map2[
+        which(ny_restaurant_map2$category %in% input$Category &
+                  ny_restaurant_map2$borough %in% input$Borough &
+                  ny_restaurant_map2$qualify_alcohol %in% input$Alcohol),])
+    
     
     #output the map in the server
     output$foodmap <- renderLeaflet({
@@ -74,8 +92,9 @@ shinyServer(function(input, output) {
             addCircles(lng = shiny_restaurants()$longitude,
                        lat = shiny_restaurants()$latitude, 
                        label = sprintf(
-                   "<strong>%s</strong><br/>%g recent positive cases",
-                   shiny_restaurants()$restaurant_name,  shiny_restaurants()$people_positive) %>% 
+                   "<strong>%s</strong><br/>%g recent positive cases<br/>%s<br/>%g sq.ft. of dining<br/>%s %g",
+                   shiny_restaurants()$restaurant_name,  shiny_restaurants()$people_positive, shiny_restaurants()$seating_interest_sidewalk,
+                   shiny_restaurants()$area, shiny_restaurants()$business_address,  shiny_restaurants()$zip) %>% 
                    lapply(htmltools::HTML),
                        color = pal(shiny_restaurants()$area)) %>%
             addLegend(title = "Dining Area (in sq. ft.)", position = "topleft",
@@ -90,6 +109,8 @@ shinyServer(function(input, output) {
                                  "4001 to 8000", "8001 to 12000",
                                  "12001 to 30000","30001 to 60000"))
     })
+  
+    output$restaurant_table <- renderDataTable(ny_restaurant_table)
     
     
     #parks --------------------------------------------------------------------------------------------------------------
