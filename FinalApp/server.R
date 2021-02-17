@@ -27,7 +27,7 @@ lapply(packages.used, check.pkg)
 
 #resturant Data 
 ny_restaurant_map <- read.socrata("https://data.cityofnewyork.us/Transportation/Open-Restaurant-Applications/pitm-atqc")
-covid_res <- read_csv("data/last7days-by-modzcta.csv") %>%
+covid_res <- read_csv("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/latest/last7days-by-modzcta.csv") %>%
   select(modzcta, people_positive) 
 # Define UI for application that maps out resturants 
 
@@ -238,20 +238,7 @@ shinyServer(function(input, output) {
     
     #COVID data --------------------------------------------------------------------------
     
-  # data1 <- read_csv("data/Modified_Zip_Code_Tabulation_Areas__MODZCTA_.csv") %>%
-  #   select(MODZCTA, the_geom)
-  # data2 <- read_csv("data/last7days-by-modzcta.csv") %>%
-  #   select(modzcta, percentpositivity_7day, people_positive)
-  # data3 <- read_csv("data/data-by-modzcta.csv") %>%
-  #   select(MODIFIED_ZCTA, COVID_CASE_COUNT, PERCENT_POSITIVE)
-  # data4 <- read_csv("data/antibody-by-modzcta.csv") %>%
-  #   select(modzcta_first, PERCENT_POSITIVE, NUM_PEOP_POS)
-  # #data1 <- subset(data1, 10000<MODZCTA & MODZCTA<11698)
-  # covid <- left_join(data1, data2, c('MODZCTA' = 'modzcta'))
-  # covid <- left_join(covid, data3, c('MODZCTA' = 'MODIFIED_ZCTA'))
-  # covid <- left_join(covid, data4, c('MODZCTA' = 'modzcta_first')) %>%
-  #   drop_na_("people_positive")  %>%
-  #   sf::st_as_sf(wkt = "the_geom")
+
     
     bins_7 <- c(0, 10, 20, 50, 100, 150, 200, 250, 300, Inf)
     bins_t <- c(0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, Inf)
