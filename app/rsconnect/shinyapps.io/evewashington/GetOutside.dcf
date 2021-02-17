@@ -5,8 +5,8 @@ account: evewashington
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3654885
-bundleId: 4237809
+bundleId: 4237849
 url: https://evewashington.shinyapps.io/GetOutside/
-when: 1613602401.69986
+when: 1613603062.72795
 asMultiple: FALSE
 asStatic: FALSE

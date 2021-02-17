@@ -28,7 +28,7 @@ shinyUI(
                                    includeCSS("style.css")
                                  ),
                                  
-                            img(src="/cover.png", width="80%"),
+                            img(src="cover.png", width="80%"),
                                      
                             div(class = "introtxt", 
                             

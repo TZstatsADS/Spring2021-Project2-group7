@@ -10,6 +10,8 @@ Term: Spring 2021
 	+ Feng Rong
 	+ Chuyun Shu
 
++ **Project link**: https://evewashington.shinyapps.io/GetOutside/
+
 + **Project summary**: The goal of our project is providing NYC residents and tourists a guide to outside activities they can do, while staying safe from Covid-19. This includes an interactive list of restaurants that are open and potentially have outdoor seating, parks with information about social distancing violations at each, which streets are open during the days of the week, and general information about Covid-19 cases. 
 
 + **Contribution statement**: ([default](doc/a_note_on_contributions.md)) 
