@@ -20,7 +20,7 @@ Term: Spring 2021
 
 	Feng contributed the covid data app and added covid data to the restaurant map.
 
-	Chuyun contributed the open streets app. 
+	Chuyun explored the open streets dataset and contributed the open streets app. 
 
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
 
