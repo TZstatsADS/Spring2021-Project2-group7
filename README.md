@@ -3,6 +3,8 @@
 ## Get Outside NYC - A Helpful Guide for Navigating Outside Activities During a Pandemic
 Term: Spring 2021
 
+![header](app/www/cover.png)
+
 + Team #7
 + Get Outside NYC: + Team members
 	+ Eve Washington
@@ -20,7 +22,9 @@ Term: Spring 2021
 
 	Feng contributed the covid data app and added covid data to the restaurant map.
 
-	Chuyun contributed the open streets functions to the app. 
+	Chuyun contributed the open streets functions to the app.  
+
++ **Project link**: 
 
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
 
