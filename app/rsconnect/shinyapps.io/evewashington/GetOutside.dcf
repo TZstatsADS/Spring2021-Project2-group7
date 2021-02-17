@@ -1,0 +1,12 @@
+name: GetOutside
+title: GetOutside
+username:
+account: evewashington
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3654885
+bundleId: 4237809
+url: https://evewashington.shinyapps.io/GetOutside/
+when: 1613602401.69986
+asMultiple: FALSE
+asStatic: FALSE
