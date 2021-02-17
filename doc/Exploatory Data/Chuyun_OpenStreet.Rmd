@@ -1,0 +1,92 @@
+---
+title: "open streets"
+author: "chuyun shu cs3894"
+date: "2/11/2021"
+output: html_document
+---
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r load libraries, warning=FALSE, message=FALSE, include=FALSE}
+## Set Up
+packages.used=as.list(
+  c(
+  "tidyverse",
+  "haven",
+  "devtools",
+  "RColorBrewer",
+  "data.table",
+  "ggplot2",
+  "dplyr", 
+  "RSocrata", 
+  "sf", 
+  "rgdal",
+  "leaflet")
+)
+check.pkg = function(x){
+  if(!require(x, character.only=T)) install.packages(x, 
+                                                     character.only=T,
+                                                     dependence=T)
+}
+lapply(packages.used, check.pkg)
+```
+
+# Open Street Data
+What is the NYC Open Street program? New York City is opening streets daily for pedestrians and cyclists to use the roadbed of the street for social distancing during the COVID-19 crisis.
+
+```{r, warning=FALSE}
+open_street <- read.socrata("https://data.cityofnewyork.us/Health/Open-Streets-Locations/uiay-nctu")
+open_street <- sf::st_as_sf(open_street, wkt = "the_geom")
+head(open_street,6)
+leaflet(data = open_street) %>%
+  addTiles() %>%
+  addPolygons(label = ~on_street)
+```
+
+First to see in macroscopic scale,let's look at what is open in big borough like Manhattan
+```{r Mahattan}
+open_street %>% filter(borough == "Manhattan") %>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(label = ~on_street)
+```
+
+
+We can Add filters by Time and or Day of the Week, for example lets see whats open on Mondays after 7PM in Manhattan
+
+```{r filter by time}
+time = "7:00PM" #format H:MPM
+open_street %>% filter(borough == "Manhattan") %>%
+  drop_na(monday_start) %>% 
+  filter(strptime(monday_start, "%I:%M%p") <= strptime("7:00PM", "%I:%M%p") )%>% 
+  filter(strptime(monday_end, "%I:%M%p") > strptime("7:00PM", "%I:%M%p") )%>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(label = ~on_street)
+```
+
+Or we can filter the open streets by smaller area like neighborhood, for example lets see what is open in Harlem
+```{r Harlem}
+open_street %>% filter(nhoodname == "Harlem") %>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(label = ~on_street)
+```
+
+Now let's dig deeper in the data, we could see that for some open streets only open on weekends between 12PM to 11PM,
+so let's explore and try to search for these streets
+
+```{r filter by weekend}
+time = "9:00PM" #format H:MPM
+open_street %>% filter(borough == "Manhattan") %>%
+  drop_na(saturday_start) %>% 
+  filter(strptime(saturday_start, "%I:%M%p") > strptime("12:00PM", "%I:%M%p") )%>% 
+  filter(strptime(sunday_end, "%I:%M%p") <= strptime("11:00PM", "%I:%M%p") )%>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(label = ~on_street)
+```

@@ -1,0 +1,30 @@
+body {
+height: 100%;
+width: 100%;
+}
+
+html {
+height: 100%;
+width: 100%;
+}
+
+.panel {
+/* Appearance */
+background-color: white;
+padding: 0 20px 20px 20px;
+cursor: move;
+/* Fade out while not hovering */
+opacity: 0.85;
+zoom: 0.9;
+transition: opacity 500ms 1s;
+}
+
+.introtxt{
+    padding: 0 20vw 0 20vw;
+}
+
+img {
+    display: block; 
+    margin-left: auto;
+    margin-right: auto;
+}
