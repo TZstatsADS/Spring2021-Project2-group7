@@ -119,7 +119,7 @@ shinyServer(function(input, output) {
                                  filter(encounter_datetime < Sys.Date() | is.na(encounter_datetime)))
     
     binspark <- c(0, 10, 25, 50, 100, 200, 400, 800, Inf)
-    palpark <- colorBin("YlOrRd", domain = parks_with_p$patrons, bins = binspark)
+    palpark <- colorBin("YlOrRd", domain = all_parks_with_p$patrons, bins = binspark)
     
     # Create the map
     output$parkmap <- renderLeaflet({
