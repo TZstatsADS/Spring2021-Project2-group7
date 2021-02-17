@@ -3,7 +3,7 @@
 ## Get Outside NYC - A Helpful Guide for Navigating Outside Activities During a Pandemic
 Term: Spring 2021
 
-+ Team #
++ Team #7
 + Get Outside NYC: + Team members
 	+ Eve Washington
 	+ Feng Rong
