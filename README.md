@@ -3,8 +3,6 @@
 ## Get Outside NYC - A Helpful Guide for Navigating Outside Activities During a Pandemic
 Term: Spring 2021
 
-![header](app/www/cover.png)
-
 + Team #7
 + Get Outside NYC: + Team members
 	+ Eve Washington
@@ -16,27 +14,25 @@ Term: Spring 2021
 
 + **Contribution statement**: ([default](doc/a_note_on_contributions.md)) 
 
-	All team members approve our work presented in this GitHub repository including this contribution statement.
-
 	Eve initialized the user interface and contributed the park and open street functions to the app.
 
 	Peter contributed the restaurant map and the restaurant directory to the app.
 
 	Feng contributed the covid data app and added covid data to the restaurant map.
 
-	Chuyun contributed the open streets functions to the app.  
+	Chuyun contributed the open streets functions to the app. 
 
-+ **Project link**: 
-
-Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
+This folder is orgarnized as follows.
 
 ```
 proj/
 ├── app/
-├── lib/
 ├── data/
 ├── doc/
-└── output/
+├── lib/
+├── output/
+├── .gitignore
+└── README.md
 ```
 
 Please see each subfolder for a README file.
