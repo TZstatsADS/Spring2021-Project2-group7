@@ -95,32 +95,35 @@ shinyUI(
                                  h2("Parks"),
                          
                                  p("This uses three data sets from NYC Open Data, all of which were created as a part of NYC Parks Covid-19 Social Distancing and Enforcement Data Collection. The first, park areas, list NYC parks and their respective polygons. The second, list encounters that park Maintenance and Operations Staff have had with patrons violating social distancing. The third list encounters NYC park ambassadors have had with patrons violating social distancing."),
-                                 tags$a(href="https://data.cityofnewyork.us/dataset/Social-Distancing-Park-Areas/4iha-m5jk", "View the Park Areas Dataset Here"), tags$br(),
-                                 tags$a(href="https://data.cityofnewyork.us/dataset/Social-Distancing-Parks-Crowds-Data/gyrw-gvqc", "View the Maintenance and Operations Staff Encounter Dataset Here"), tags$br(),
-                                 tags$a(href="https://data.cityofnewyork.us/City-Government/Social-Distancing-Citywide-Ambassador-Data/akzx-fghb", "View the Park Ambassador Encounter Dataset Here"), tags$br()
+                                 tags$a(href="https://data.cityofnewyork.us/dataset/Social-Distancing-Park-Areas/4iha-m5jk", "View the Park Areas Dataset Here", tags$br()),
+                                 tags$a(href="https://data.cityofnewyork.us/dataset/Social-Distancing-Parks-Crowds-Data/gyrw-gvqc", "View the Maintenance and Operations Staff Encounter Dataset Here", tags$br()),
+                                 tags$a(href="https://data.cityofnewyork.us/City-Government/Social-Distancing-Citywide-Ambassador-Data/akzx-fghb", "View the Park Ambassador Encounter Dataset Here", tags$br()),
                                  
                                  h2("COVID-19 Overview"),
                                  
-                                 p("This was created with the COVID-19: Data available through NYC Department of Health. It constantly tracks the COVID-19 related data through all boroughs of New York City. This app focuses on the total number of confirmed cases, number of antibody, as well as the number of positive tests during the pastseven days.”),
-                                 tags$a(href = "https://www1.nyc.gov/site/doh/covid/covid-19-data.page", "View Dataset Here", tags$br)
-                                 h1("Tutorials Used")
+                                 p("This was created with the COVID-19: Data available through NYC Department of Health. It constantly tracks the COVID-19 related data through all boroughs of New York City. This app focuses on the total number of confirmed cases, number of antibody, as well as the number of positive tests during the past seven days"),
+                                 tags$a(href = "https://www1.nyc.gov/site/doh/covid/covid-19-data.page", "View Dataset Here"),
                                  
-                                 h2("Shiny App Tutorials")
+                                 h1("Tutorials Used"),
                                  
-                                 p("General Tutorials for creating shiny apps")
-                                 tags$a(href = "https://chengliangtang.shinyapps.io/shiny_tutorial_2017fall/", "View the General Shiny App Tutorial Here", tags$br
+                                 h2("Shiny App Tutorials"),
                                  
-                                 p("This tutorial was used to make the directory for the restaurants")
-                                 tags$a(href= "https://shiny.rstudio.com/reference/shiny/latest/tableOutput.html", "View the Table Output Tutorial Here"), tags$br())
+                                 p("General tutorial for creating shiny apps."),
+                                 tags$a(href = "https://chengliangtang.shinyapps.io/shiny_tutorial_2017fall/", "View the General Shiny App Tutorial Here"),
+                                 
+                                 
+                                 p("This tutorial was used to make the directory for the restaurants."),
+                                 tags$a(href= "https://shiny.rstudio.com/reference/shiny/latest/tableOutput.html", "View the Table Output Tutorial Here"),
                           
-                                 h2("Leaflet Tutorial")
-                                 p("This tutorial was used to make the maps in leaflet")
-                                 tags$a(href = "https://rstudio.github.io/leaflet/map_widget.html", "View the Leaflet Map Tutorial Here", tags$br)
                                  
-                                 h2("Background Information")
+                                 h2("Leaflet Tutorial"),
+                                 p("This tutorial was used to make the maps in leaflet."),
+                                 tags$a(href = "https://rstudio.github.io/leaflet/map_widget.html", "View the Leaflet Map Tutorial Here"),
                                  
-                                 p("This article was used when considering motivation for the restaurant app")
-                                 tags$a(href = "https://www.eater.com/21518621/indoor-dining-restaurants-safety-risks-covid-19-chefs-waiters-servers", "View the Article Here", tags$br)
+                                 h2("Background Information"),
+                                 
+                                 p("This article was used when considering motivation for the restaurant app."),
+                                 tags$a(href = "https://www.eater.com/21518621/indoor-dining-restaurants-safety-risks-covid-19-chefs-waiters-servers", "View the Article Here")
                            )
                         )
                ),
