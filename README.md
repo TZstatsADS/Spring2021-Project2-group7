@@ -21,6 +21,8 @@ Term: Spring 2021
 	Feng contributed the covid data app and added covid data to the restaurant map.
 
 	Chuyun contributed the open streets functions to the app. 
+	
+	Everyone was allowed to modify this contribution statement and give input.
 
 This folder is orgarnized as follows.
 
