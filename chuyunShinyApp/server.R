@@ -32,43 +32,32 @@ check.pkg = function(x){
 
 lapply(packages.used, check.pkg)
 
-ny_open_street_map <- read.socrata("https://data.cityofnewyork.us/Health/Open-Streets-Locations/uiay-nctu")
+open_street <- read.socrata("https://data.cityofnewyork.us/Health/Open-Streets-Locations/uiay-nctu")
 
+open_street <- sf::st_as_sf(open_street, wkt = "the_geom")
   
 
 server <- function(input, output) {
   
-  ny_open_street_map <- ny_open_street_map %>% 
-    drop_na_("start_time")
-  
-     
-  bins <- c(0, 200, 400, 600, 1000, 2000, 4000, 8000, 12000, 30000)
-  pal <- colorBin(c("red", "orange", "yellow", "green", "blue", 
-                    "purple", "violet", "brown", "gray", "black"),
-                  domain = NULL, bins = bins)
-  
   #Allow dataset to be manipulated by the shiny app ui
-  shiny_open_street <- reactive(ny_open_street_map[
-    which(ny_open_street_map$location_p %in% input$Location &
-            ny_open_street_map$borough %in% input$Borough &
-            ny_open_street_map$on_street %in% input$OnStreet),])
+  shiny_open_street <- reactive(open_street %>%
+                              filter(borough %in% input$boroughst) %>%
+                              {if(input$Day == "Monday") drop_na(., monday_start)  else . } %>%
+                              {if(input$Day == "Tuesday") drop_na(., tuesday_start) else . } %>%
+                              {if(input$Day == "Wednesday") drop_na(., wednesday_start) else . } %>%
+                              {if(input$Day == "Thursday") drop_na(., thursday_start) else . } %>%
+                              {if(input$Day == "Friday") drop_na(., friday_start) else . } %>%  
+                              {if(input$Day == "Saturday") drop_na(., saturday_start) else . } %>% 
+                              {if(input$Day == "Sunday") drop_na(., sunday_start) else . } 
+                              )
+  
+   
   
   #output the map in the server
   output$map <- renderLeaflet({
-    ny_map <- leaflet(options = leafletOptions(minZoom = 5, maxZoom = 18)) %>%
-      setView(-73.99, lat = 40.75, zoom = 10) %>%
-      addTiles() %>%
-      addLegend(title = "Open Streets Area (in sq. ft.)", position = "topleft",
-                colors = c("red",
-                           "orange", "yellow", 
-                           "green", "blue", 
-                           "purple", "violet", 
-                           "brown", "gray", "black"), 
-                labels = c("0 to 200", "201 to 400",
-                           "401 to 600", "601 to 1000",
-                           "1001 to 2000", "2001 to 4000",
-                           "4001 to 8000", "8001 to 12000",
-                           "12001 to 30000"))
+    leaflet(data = shiny_open_street()) %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      addPolygons(label = ~on_street)
   })
 }
 
