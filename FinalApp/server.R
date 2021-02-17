@@ -54,7 +54,8 @@ shinyServer(function(input, output) {
                      values_to = "area") %>%
         drop_na_("area") 
     ny_restaurant_map <- left_join(ny_restaurant_map, covid_res, c('zip' = 'modzcta'))
-    
+    ny_restaurant_map %>% drop_na_("people_positive")
+
     bins <- c(0, 200, 400, 600, 1000, 2000, 4000, 8000, 20000, 60000)
     pal <- colorBin(c("red", "orange", "yellow", "green", "blue", 
                       "purple", "violet", "brown", "gray", "black"),
