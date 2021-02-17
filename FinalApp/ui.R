@@ -12,15 +12,24 @@ library(shinythemes)
 
 # Define UI for application that draws a histogram
 shinyUI(
-    navbarPage(theme = shinytheme("journal"), "Get Outside NYC",
+  
+    navbarPage(theme = shinytheme("journal"),
                
-               tags$head(
-                 # Include our custom CSS
-                 includeCSS("style.css"),
-               ),
+               "Get Outside NYC",
+               
                navbarMenu("About", 
                         tabPanel("Outdoor Activites",
-                                    h1("Safe Outdoor Activites during COVID-19"),
+                            
+                                 tags$head(
+                                   # Include our custom CSS
+                                   includeCSS("style.css"),
+                                 ),
+                                 
+                            img(src="/cover.png", width="80%"),
+                                     
+                            div(class = "introtxt", 
+                            
+                                  h1("Safe Outdoor Activites during COVID-19"),
                                         p("COVID-19 has added massive limitations to new yorkers' social lives. The museums, bars, clubs, festivals, concerts and other crowded spaces that used to occupy weeknights and weekends are now closed or only open in limited capacities. Yet, at the same time social lives and activities are more important than ever. Whether its zoom fatigue, depression and anxiety from isolation, or a need to exercise, our health is intrinsically tied to what activities we do—making it critical to find COVID-safe ways to fill our free time."),
 
                                         p("So what to do with all that free time?  Believe it or not there are still things to do that are safe and accessible. One of the biggest categories of these activities is outdoor activity, which pose a lower risk of spread of the COVID-19 virus than indoor activities do."),
@@ -51,25 +60,28 @@ shinyUI(
                                          
                                          p(strong("Meet up with friends outside your bubble."), "Parks provide a lot a space, which makes it ideal for a socially distanced chat. ")
                                  
-                                ),
+                                )
+                            ),
                         tabPanel("Data and Sources")
                             
                         ),
                
                navbarMenu("Resturants",
-                          tabPanel("Map", 
-                                   fluidPage(
+                          tabPanel("Map",
+                                   
+                                   tags$head(
+                                     # Include our custom CSS
+                                     includeCSS("style.css"),
+                                   ),
+                                   
+                                   fillPage(
                                        
                                        # Application title
-                                       titlePanel("Map of NYC Resturants"),
-                                       
-                                       mainPanel(leafletOutput("foodmap", width="100%", height="100%")),
+                                       tags$style(type = "text/css", "#foodmap {height: calc(100vh - 100px) !important;}"),
+                                       leafletOutput("foodmap"),
                                        #Create master panel with different widgets for specification
-                                       absolutePanel(id = "controls", class = "panel panel-default", 
-                                                     fixed = TRUE, draggable = TRUE,
-                                                     top = 80, left = 600, 
-                                                     right = "auto", bottom = "auto", 
-                                                     width = 300, height = "auto",
+                                       absolutePanel(fixed = TRUE, class = "panel panel-default", draggable = TRUE, top = 90, left = "auto", 
+                                                     right = 20, bottom = "auto", width = 330, height = "auto",
                                                      
                                                      #Widget that chooses which area of dining to look at
                                                      
@@ -89,47 +101,54 @@ shinyUI(
                                                                         selected = c("Manhattan", "Brooklyn", "Bronx",
                                                                                      "Queens", "Staten Island")),
                                                      
-                                                     #Widget that filters restaurants by alcohol availibility
+                                                     #Widget that filters restaurants by alcohol availability
                                                      span(tags$i(h4("Select Restaurants by Alcohol License Status"))),
                                                      checkboxGroupInput("Alcohol", "Can alcohol be served here?",
                                                                         choices = c("yes", "no"),
                                                                         selected = c("yes", "no")
-                                                     )
+                                                     ), 
+                                                     
+                                                     helpText("Tip! Drag this panel around to better see the map")
                                        )
                                    )),
                           tabPanel("Database")),
                tabPanel("Open Streets"),
                tabPanel("Parks", 
                         fillPage(
-                            #leaflet not generation for some reason
-                            leafletOutput("parkmap", width="100%", height="100%"),
-                            absolutePanel(fixed = TRUE, class = "panel panel-default", draggable = TRUE, top = 50, left = "auto", 
-                                          right = 10, bottom = "auto", width = 330, height = "auto",
+                            tags$style(type = "text/css", "#parkmap {height: calc(100vh - 100px) !important;}"),
+                            leafletOutput("parkmap"),
+                            
+                            absolutePanel(fixed = TRUE, class = "panel panel-default", draggable = TRUE, top = 90, left = "auto", 
+                                          right = 20, bottom = "auto", width = 330, height = "auto",
                                           span(tags$i(h4("Select Parks by Borough"))),
                                           checkboxGroupInput("borough", "Which boroughs are you interested in?",
                                                              choices = c("Manhattan", "Brooklyn", "Bronx",
                                                                          "Queens", "Staten Island"),
                                                              selected = c("Manhattan", "Brooklyn", "Bronx",
                                                                           "Queens", "Staten Island")), 
-                                          span(tags$i(h4("Click on a Park to See the Amount Of Social Distacing Patrons Over Time"))),
-                                          plotOutput("time_reports", height=200)
+                                          span(tags$i(h4("Click on a Park to See the Number of Patrons volating Social Distancing Over Time"))),
+                                          plotOutput("time_reports", height=200),
+                                          helpText("Tip! Drag this panel around to better see the map")
                             )
                         )), 
                         
                tabPanel("COVID-19 Overview", 
-                        fluidPage(
-                            titlePanel("Map of NYC COVID-19 Data"),
-                            
-                            
-                            mainPanel(
+
                                 tabsetPanel(
-                                    tabPanel("7-Days Positive", leafletOutput("recent_map")), 
-                                    tabPanel("Total Positive", leafletOutput("total_map")), 
-                                    tabPanel("Antibody", leafletOutput("antibody_map"))
+                                  
+                                    tabPanel("7-Days Positive", 
+                                             tags$style(type = "text/css", "#recent_map {height: calc(100vh - 100px) !important;}"),
+                                             leafletOutput("recent_map")),
+                                    
+                                    tabPanel("Total Positive", 
+                                             tags$style(type = "text/css", "#total_map {height: calc(100vh - 100px) !important;}"),
+                                             leafletOutput("total_map")), 
+                                    
+                                    tabPanel("Antibody", 
+                                             tags$style(type = "text/css", "#antibody_map {height: calc(100vh - 100px) !important;}"),
+                                             leafletOutput("antibody_map"))
                                 )
-                            )   
-                        
-                        )
+
                )
                
                

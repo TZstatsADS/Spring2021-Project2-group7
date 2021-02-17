@@ -65,8 +65,7 @@ shinyServer(function(input, output) {
     
     #output the map in the server
     output$foodmap <- renderLeaflet({
-        ny_map <- leaflet(options = leafletOptions(minZoom = 5, maxZoom = 18)) %>%
-            setView(-73.98928, lat = 40.75042, zoom = 10) %>%
+        leaflet() %>%
             addProviderTiles(providers$CartoDB.Positron)%>%
             addCircles(lng = shiny_restaurants()$longitude,
                        lat = shiny_restaurants()$latitude, 
