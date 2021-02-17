@@ -139,7 +139,7 @@ shinyServer(function(input, output) {
                                     {if(input$Day == "Monday") filter(., strptime(monday_start, "%I:%M%p") <= strptime(input$Time, "%I:%M%p") & 
                                                                         strptime(monday_end, "%I:%M%p") > strptime(input$Time, "%I:%M%p")) else . } %>%
                                     {if(input$Day == "Tuesday") filter(., strptime(tuesday_start, "%I:%M%p") <= strptime(input$Time, "%I:%M%p") & 
-                                                                         strptime(tueday_end, "%I:%M%p") > strptime(input$Time, "%I:%M%p")) else . } %>%
+                                                                         strptime(tuesday_end, "%I:%M%p") > strptime(input$Time, "%I:%M%p")) else . } %>%
                                     {if(input$Day == "Wednesday") filter(., strptime(wednesday_start, "%I:%M%p") <= strptime(input$Time, "%I:%M%p") & 
                                                                            strptime(wednesday_end, "%I:%M%p") > strptime(input$Time, "%I:%M%p")) else . } %>%
                                     {if(input$Day == "Thursday") filter(., strptime(thursday_start, "%I:%M%p") <= strptime(input$Time, "%I:%M%p") & 

@@ -25,7 +25,7 @@ shinyUI(
                             
                                  tags$head(
                                    # Include our custom CSS
-                                   includeCSS("style.css"),
+                                   includeCSS("style.css")
                                  ),
                                  
                             img(src="/cover.png", width="80%"),
@@ -69,16 +69,46 @@ shinyUI(
                                  
                                 )
                             ),
-                        tabPanel("Data and Sources")
+                        tabPanel(style = "overflow-y:scroll; max-height:90vh",
+                                 "Data and Sources", 
+                                          tags$head(
+                                            # Include our custom CSS
+                                            includeCSS("style.css")
+                                          ),
                             
-                        ),
-               
+                             div(class = "introtxt", 
+                                 
+                                 h1("Data Sources"),
+                                 h3("Data Last Updated:"),
+                                 h4(Sys.Date()), 
+                                 
+                                 h2("Restaurants"),
+                                 
+                                 p("This was created with the Open Restaurant Applications dataset from NYC Open Data, It is a dataset of applications from food service establishments seeking authorization to re-open under Phase Two of the State’s New York Forward Plan, and place outdoor seating in front of their business on the sidewalk and/or roadway."), 
+                                 tags$a(href="https://data.cityofnewyork.us/Transportation/Open-Restaurant-Applications/pitm-atqc", "View Dataset Here"), 
+                        
+                                 h2("Open Streets"), 
+                                  
+                                 p("This was created with the Open Streets Locations data set available through NYC Open Data. It provides the hours and locations of streets that have been closed to cars so the public can use the roadbed."),
+                                 tags$a(href="https://data.cityofnewyork.us/Health/Open-Streets-Locations/uiay-nctu", "View Dataset Here"), 
+                                 
+                                 h2("Parks"),
+                         
+                                 p("This uses three data sets from NYC Open Data, all of which were created as a part of NYC Parks Covid-19 Social Distancing and Enforcement Data Collection. The first, park areas, list NYC parks and their respective polygons. The second, list encounters that park Maintenance and Operations Staff have had with patrons violating social distancing. The third list encounters NYC park ambassadors have had with patrons violating social distancing."),
+                                 tags$a(href="https://data.cityofnewyork.us/dataset/Social-Distancing-Park-Areas/4iha-m5jk", "View the Park Areas Dataset Here"), tags$br(),
+                                 tags$a(href="https://data.cityofnewyork.us/dataset/Social-Distancing-Parks-Crowds-Data/gyrw-gvqc", "View the Maintenance and Operations Staff Encounter Dataset Here"), tags$br(),
+                                 tags$a(href="https://data.cityofnewyork.us/City-Government/Social-Distancing-Citywide-Ambassador-Data/akzx-fghb", "View the Park Ambassador Encounter Dataset Here"), tags$br()
+                        
+                            
+                           )
+                        )
+               ),
                navbarMenu("Resturants",
                           tabPanel("Map",
                                    
                                    tags$head(
                                      # Include our custom CSS
-                                     includeCSS("style.css"),
+                                     includeCSS("style.css")
                                    ),
                                    
                                    fillPage(
@@ -91,7 +121,7 @@ shinyUI(
                                                      right = 20, bottom = "auto", width = 330, height = "auto",
                                                      
                                                      #Widget that chooses which area of dining to look at
-                                                     
+                                                     span(tags$i(h3("Find a Resturant"))),
                                                      span(tags$i(h4("Select Dining Capacity by Type of Seating"))),
                                                      selectInput("Category", 
                                                                  "Which type of seating are you interested in?",
@@ -207,6 +237,7 @@ shinyUI(
                             
                             absolutePanel(fixed = TRUE, class = "panel panel-default", draggable = TRUE, top = 90, left = "auto", 
                                           right = 20, bottom = "auto", width = 330, height = "auto",
+                                          span(tags$i(h3("Find a Park"))),
                                           span(tags$i(h4("Select Parks by Borough"))),
                                           helpText("Tip! at least one borough must be selected"),
                                           checkboxGroupInput("borough", "Which boroughs are you interested in?",
@@ -243,4 +274,4 @@ shinyUI(
                
                
         )
-    )
+)
