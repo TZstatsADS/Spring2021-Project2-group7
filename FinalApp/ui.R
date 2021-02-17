@@ -17,7 +17,7 @@ shinyUI(
                
                "Get Outside NYC",
                
-               navbarMenu("About", 
+               navbarMenu("About",  
                         tabPanel("Outdoor Activites",
                             
                                  tags$head(
