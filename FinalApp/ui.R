@@ -9,6 +9,7 @@
 
 library(shiny)
 library(shinythemes)
+library(leaflet)
 
 # Define UI for application that draws a histogram
 shinyUI(
@@ -101,6 +102,7 @@ shinyUI(
                                                      
                                                      #Widget that filters restaurants by borough (can select multiple)
                                                      span(tags$i(h4("Select Restaurants by Borough"))),
+                                                     helpText("Tip! You much have at least one borough selected"),
                                                      checkboxGroupInput("Borough", "Which boroughs are you interested in?",
                                                                         choices = c("Manhattan", "Brooklyn", "Bronx",
                                                                                     "Queens", "Staten Island"),
@@ -153,9 +155,12 @@ shinyUI(
                                                             choices = c("No", "Yes")),
                                                 
                                                 conditionalPanel("input.datetime == 'Yes'", 
+                                                                 
                                                                  selectInput("Day", "What day of the week would you like to vist a Street?",
                                                                              choices = c("Select", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
                                                                  ),
+                                                                
+                                                                 helpText("Tip! Try diffrent times to see diffrent streed avaiblites"),
                                                                  
                                                                  selectInput("Time", "What time would you like to vist a Street?",
                                                                              choices = c("12:00AM",
@@ -185,7 +190,8 @@ shinyUI(
                                                                  )
                                                                  
                                                                  
-                                                )
+                                                ),
+                                                helpText("Tip! Drag this panel around to better see the map")
                                                 
                                                 
                                                 
@@ -202,18 +208,21 @@ shinyUI(
                             absolutePanel(fixed = TRUE, class = "panel panel-default", draggable = TRUE, top = 90, left = "auto", 
                                           right = 20, bottom = "auto", width = 330, height = "auto",
                                           span(tags$i(h4("Select Parks by Borough"))),
+                                          helpText("Tip! at least one borough must be selected"),
                                           checkboxGroupInput("borough", "Which boroughs are you interested in?",
                                                              choices = c("Manhattan", "Brooklyn", "Bronx",
                                                                          "Queens", "Staten Island"),
                                                              selected = c("Manhattan", "Brooklyn", "Bronx",
                                                                           "Queens", "Staten Island")), 
-                                          span(tags$i(h4("Click on a Park to See the Number of Patrons volating Social Distancing Over Time"))),
+                                          span(tags$i(h4("Click on a Park to See the Number of Patrons violating Social Distancing Over Time"))),
                                           plotOutput("time_reports", height=200),
                                           helpText("Tip! Drag this panel around to better see the map")
                             )
                         )), 
                         
                tabPanel("COVID-19 Overview", 
+                                
+                                p("Make an educated Descion on where you go in New York. Hover over a zipcode to see COVID-19 data for that area, Explore the diffrent tabs for diffrent statistics."),  
 
                                 tabsetPanel(
                                   

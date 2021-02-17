@@ -136,7 +136,6 @@ shinyServer(function(input, output) {
     #Open Streets --------------------------------------------------------------------------------------------
     #Allow dataset to be manipulated by the shiny app ui
     shiny_open_street <- reactive(open_street %>%
-                                    filter(borough %in% input$boroughst) %>%
                                     {if(input$Day == "Monday") filter(., strptime(monday_start, "%I:%M%p") <= strptime(input$Time, "%I:%M%p") & 
                                                                         strptime(monday_end, "%I:%M%p") > strptime(input$Time, "%I:%M%p")) else . } %>%
                                     {if(input$Day == "Tuesday") filter(., strptime(tuesday_start, "%I:%M%p") <= strptime(input$Time, "%I:%M%p") & 
@@ -151,7 +150,11 @@ shinyServer(function(input, output) {
                                                                           strptime(saturday_end, "%I:%M%p") > strptime(input$Time, "%I:%M%p")) else . } %>% 
                                     {if(input$Day == "Sunday") filter(., strptime(sunday_start, "%I:%M%p") <= strptime(input$Time, "%I:%M%p") & 
                                                                         strptime(sunday_end, "%I:%M%p") > strptime(input$Time, "%I:%M%p")) else . }%>%
-                                    {if(nrow(.)==0)  showNotification("no streets exist that meet such criteria, try picking another time", type = "error", duration = 15) else . }
+                                    {if(nrow(.)==0)  showNotification("no streets exist that meet such criteria, try picking another time", type = "error", duration = 7) else . } %>%
+                                    
+                                    {if(input$datetime == "No") bind_rows(., open_street)  else . } %>%
+                                    
+                                    filter(borough %in% input$boroughst) 
     )
     
     
