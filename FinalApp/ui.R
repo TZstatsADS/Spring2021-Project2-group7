@@ -18,7 +18,8 @@ shinyUI(
                "Get Outside NYC",
                
                navbarMenu("About",  
-                        tabPanel("Outdoor Activites",
+                        tabPanel(style = "overflow-y:scroll; max-height:90vh",
+                                 "Outdoor Activites",
                             
                                  tags$head(
                                    # Include our custom CSS
@@ -115,10 +116,11 @@ shinyUI(
                                                      helpText("Tip! Drag this panel around to better see the map")
                                        )
                                    )),
-                          tabPanel("Database", fluidPage(titlePanel("NYC Resturants Database (area in sq. ft.)"),
+                          tabPanel(style = "overflow-y:scroll; max-height:90vh", "Database", fluidPage(titlePanel("NYC Resturants Database (area in sq. ft.)"),
                                                          mainPanel(
                                                            column(1, dataTableOutput("restaurant_table"))))
                          )),
+               tabPanel("Open Stree
                tabPanel("Open Streets"),
                tabPanel("Parks", 
                         fillPage(
