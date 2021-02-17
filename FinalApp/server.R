@@ -56,6 +56,7 @@ shinyServer(function(input, output) {
       drop_na_("area") 
     
     ny_restaurant_map2 <- left_join(ny_restaurant_map2, covid_res, c('zip' = 'modzcta'))
+    ny_restaurant_map2$people_positive[is.na(ny_restaurant_map2$people_positive)] <- "Unknown"
     
     
     ny_restaurant_table <- ny_restaurant_map %>% 
