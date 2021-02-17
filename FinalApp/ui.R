@@ -46,8 +46,12 @@ shinyUI(
                                          p("There are three reliable types places you can go and gather in outside in New York City"),
                                     
                                     h3("Outdoor Dining"),
-                                        p("@peter"),
-                                    
+                                        p("Lack of proper ventilation and clean air can make indoor dining especially risky in the age of COVID-19. Outdoor dining is a much safer alternative that allows people to enjoy a dine-in experience similar to pre-pandemic times."),
+                                        
+                                        p(strong("Planning Ahead."), "Be sure to check if the restaurant you want to eat at has outdoor dining and has availible tables"),
+                                        
+                                        p(strong("Common Courtesy."), "When inside the restaurant making your order, be sure to wear a mask."),
+                                
                                     h3("Open Streets"),
                                         p("@chuyun"),
                                  
@@ -111,7 +115,10 @@ shinyUI(
                                                      helpText("Tip! Drag this panel around to better see the map")
                                        )
                                    )),
-                          tabPanel("Database")),
+                          tabPanel("Database", fluidPage(titlePanel("NYC Resturants Database (area in sq. ft.)"),
+                                                         mainPanel(
+                                                           column(1, dataTableOutput("restaurant_table"))))
+                         )),
                tabPanel("Open Streets"),
                tabPanel("Parks", 
                         fillPage(
