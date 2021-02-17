@@ -67,7 +67,7 @@ ny_restaurant_map2 <- ny_restaurant_map %>%
            replace_na(roadway_dimensions_area, 0) ) %>%
   pivot_longer(cols = ends_with("area"), names_to = "category",
                values_to = "area") %>%
-  drop_na_("area") 
+  drop_na("area") 
 
 ny_restaurant_map2 <- left_join(ny_restaurant_map2, covid_res, c('zip' = 'modzcta'))
 ny_restaurant_map2$people_positive[is.na(ny_restaurant_map2$people_positive)] <- "Unknown"
@@ -90,9 +90,9 @@ ny_restaurant_table <- ny_restaurant_map %>%
 
 #Define bins for colors on map
 
-bins <- c(0, 200, 400, 600, 1000, 2000, 4000, 8000, 20000, 60000)
+bins <- c(0, 200, 400, 600, 1000, 2000, 4000, 8000, 60000)
 pal <- colorBin(c("red", "orange", "yellow", "green", "blue", 
-                  "purple", "violet", "brown", "gray", "black"),
+                  "purple", "violet", "brown", "black"),
                 domain = NULL, bins = bins)
 
 
