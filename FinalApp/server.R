@@ -9,15 +9,37 @@
 
 library(shiny)
 
-
+#resturant Data 
 ny_restaurant_map <- read.socrata("https://data.cityofnewyork.us/Transportation/Open-Restaurant-Applications/pitm-atqc")
 # Define UI for application that maps out resturants 
+
+
+#park data + Cleaning
+park_poly <- read.socrata("https://data.cityofnewyork.us/dataset/Social-Distancing-Park-Areas/4iha-m5jk")
+
+park_poly <- sf::st_as_sf( park_poly, wkt = "multipolygon")
+
+violations <-  read.socrata("https://data.cityofnewyork.us/dataset/Social-Distancing-Parks-Crowds-Data/gyrw-gvqc") %>%
+    group_by(park_area_id, encounter_timestamp) %>% 
+    summarise(patrons = sum(patroncount))
+
+ambassabors <- read.socrata("https://data.cityofnewyork.us/City-Government/Social-Distancing-Citywide-Ambassador-Data/akzx-fghb") %>%
+    group_by(park_area_id, encounter_datetime) %>% 
+    summarise(patrons = as.integer(sum(sd_patronscomplied) + sd(sd_patronsnocomply))) %>% 
+    drop_na(patrons)
+
+all_violations <- merge(ambassabors,violations,by.x = c("patrons", "park_area_id", "encounter_datetime"), by.y = c("patrons", "park_area_id","encounter_timestamp"), all=TRUE)
+
+all_parks_with_p <- merge(park_poly,all_violations,by="park_area_id", all.x=TRUE)
+
+all_parks_with_p$encounter_datetime <- anytime::anydate(all_parks_with_p$encounter_datetime)
+
 
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
     
-    #Resturants ---------------------------------------------------------------------------------------------
+    #Restaurants ---------------------------------------------------------------------------------------------
     #Get dataset to use map
     
     ny_restaurant_map <- ny_restaurant_map %>% 
@@ -45,7 +67,7 @@ shinyServer(function(input, output) {
     output$foodmap <- renderLeaflet({
         ny_map <- leaflet(options = leafletOptions(minZoom = 5, maxZoom = 18)) %>%
             setView(-73.98928, lat = 40.75042, zoom = 10) %>%
-            addTiles() %>%
+            addProviderTiles(providers$CartoDB.Positron)%>%
             addCircles(lng = shiny_restaurants()$longitude,
                        lat = shiny_restaurants()$latitude, 
                        label = shiny_restaurants()$restaurant_name,
@@ -66,23 +88,25 @@ shinyServer(function(input, output) {
     
     #parks --------------------------------------------------------------------------------------------------------------
     filteredData <- reactive(all_parks_with_p %>%
-                                 filter(park_borough %in% input$Borough) %>% 
+                                 filter(park_borough %in% input$borough) %>% 
                                  filter(encounter_datetime < Sys.Date() | is.na(encounter_datetime)))
     
+    binspark <- c(0, 10, 25, 50, 100, 200, 400, 800, Inf)
+    palpark <- colorBin("YlOrRd", domain = parks_with_p$patrons, bins = binspark)
     
     # Create the map
     output$parkmap <- renderLeaflet({
         leaflet(filteredData()) %>%
             addProviderTiles(providers$CartoDB.Positron) %>%
             addPolygons(label = ~park_area_desc,
-                        fillColor = ~pal(patrons),
+                        fillColor = ~palpark(patrons),
                         weight = .5,
                         opacity = 5,
                         color = "white",
                         dashArray = "3",
                         fillOpacity = 0.7,
                         layerId = ~park_area_desc) %>%
-            addLegend("bottomright", pal = pal, values = ~patrons,
+            addLegend("bottomright", pal = palpark, values = ~patrons,
                       title = "Number of Patrons Violating Social Distancing ",
                       opacity = 1
             )
@@ -146,7 +170,7 @@ shinyServer(function(input, output) {
     
     output$recent_map <- renderLeaflet({
         recent_map <- leaflet(data = covid) %>%
-            addTiles() %>%
+            addProviderTiles(providers$CartoDB.Positron)%>%
             addPolygons(fillOpacity = 0.9, weight = 2, opacity = 1, color = 'white', dashArray = '3',
                         fillColor = ~pal_7(people_positive), 
                         highlight = highlightOptions(
@@ -166,7 +190,7 @@ shinyServer(function(input, output) {
     
     output$total_map <- renderLeaflet({
         total_map <- leaflet(data = covid) %>%
-            addTiles() %>%
+            addProviderTiles(providers$CartoDB.Positron)%>%
             addPolygons(fillOpacity = 0.9, weight = 2, opacity = 1, color = 'white', dashArray = '3',
                         fillColor = ~pal_t(COVID_CASE_COUNT), 
                         highlight = highlightOptions(
@@ -186,7 +210,7 @@ shinyServer(function(input, output) {
     
     output$antibody_map <- renderLeaflet({
         antibody_map <- leaflet(data = covid) %>%
-            addTiles() %>%
+            addProviderTiles(providers$CartoDB.Positron)%>%
             addPolygons(fillOpacity = 0.9, weight = 2, opacity = 1, color = 'white', dashArray = '3',
                         fillColor = ~pal_a(NUM_PEOP_POS), 
                         highlight = highlightOptions(

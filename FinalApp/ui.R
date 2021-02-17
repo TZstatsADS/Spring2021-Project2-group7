@@ -13,6 +13,11 @@ library(shinythemes)
 # Define UI for application that draws a histogram
 shinyUI(
     navbarPage(theme = shinytheme("journal"), "Get Outside NYC",
+               
+               tags$head(
+                 # Include our custom CSS
+                 includeCSS("style.css"),
+               ),
                navbarMenu("About", 
                         tabPanel("Outdoor Activites",
                                     h1("Safe Outdoor Activites during COVID-19"),
@@ -58,7 +63,7 @@ shinyUI(
                                        # Application title
                                        titlePanel("Map of NYC Resturants"),
                                        
-                                       mainPanel(leafletOutput("foodmap")),
+                                       mainPanel(leafletOutput("foodmap", width="100%", height="100%")),
                                        #Create master panel with different widgets for specification
                                        absolutePanel(id = "controls", class = "panel panel-default", 
                                                      fixed = TRUE, draggable = TRUE,
@@ -96,14 +101,12 @@ shinyUI(
                tabPanel("Open Streets"),
                tabPanel("Parks", 
                         fillPage(
-                            tags$style(type = "text/css", "html, body {width:100%; height:100%}"),
-                            
                             #leaflet not generation for some reason
-                            leafletOutput("parkmap", width = "100%", height = "100%"),
-                            absolutePanel(fixed = TRUE, class = "panel panel-default", draggable = TRUE, top = 30, left = "auto", 
+                            leafletOutput("parkmap", width="100%", height="100%"),
+                            absolutePanel(fixed = TRUE, class = "panel panel-default", draggable = TRUE, top = 50, left = "auto", 
                                           right = 10, bottom = "auto", width = 330, height = "auto",
                                           span(tags$i(h4("Select Parks by Borough"))),
-                                          checkboxGroupInput("Borough", "Which boroughs are you interested in?",
+                                          checkboxGroupInput("borough", "Which boroughs are you interested in?",
                                                              choices = c("Manhattan", "Brooklyn", "Bronx",
                                                                          "Queens", "Staten Island"),
                                                              selected = c("Manhattan", "Brooklyn", "Bronx",
