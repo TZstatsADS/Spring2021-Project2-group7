@@ -7,7 +7,22 @@
 #    http://shiny.rstudio.com/
 #
 
-library(shiny)
+packages.used=as.list(
+  c(
+  "shiny",
+  "leaflet",
+  "RSocrata",
+  "tidyverse",
+  "haven",
+  "devtools",
+  "RColorBrewer")
+)
+check.pkg = function(x){
+  if(!require(x, character.only=T)) install.packages(x, 
+                                                     character.only=T,
+                                                     dependence=T)
+}
+lapply(packages.used, check.pkg)
 
 #resturant Data 
 ny_restaurant_map <- read.socrata("https://data.cityofnewyork.us/Transportation/Open-Restaurant-Applications/pitm-atqc")
@@ -56,6 +71,7 @@ shinyServer(function(input, output) {
       drop_na_("area") 
     
     ny_restaurant_map2 <- left_join(ny_restaurant_map2, covid_res, c('zip' = 'modzcta'))
+    ny_restaurant_map2$people_positive[is.na(ny_restaurant_map2$people_positive)] <- "Unknown"
     
     
     ny_restaurant_table <- ny_restaurant_map %>% 
@@ -92,7 +108,7 @@ shinyServer(function(input, output) {
             addCircles(lng = shiny_restaurants()$longitude,
                        lat = shiny_restaurants()$latitude, 
                        label = sprintf(
-                   "<strong>%s</strong><br/>%g recent positive cases<br/>%s<br/>%g sq.ft. of dining<br/>%s %g",
+                   "<strong>%s</strong><br/>%g recent positive cases in zip code<br/>%s<br/>%g sq.ft. of dining<br/>%s %g",
                    shiny_restaurants()$restaurant_name,  shiny_restaurants()$people_positive, shiny_restaurants()$seating_interest_sidewalk,
                    shiny_restaurants()$area, shiny_restaurants()$business_address,  shiny_restaurants()$zip) %>% 
                    lapply(htmltools::HTML),
