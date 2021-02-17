@@ -14,6 +14,7 @@ library(shinythemes)
 shinyUI(
   
     navbarPage(theme = shinytheme("journal"),
+               position = "static-top",
                
                "Get Outside NYC",
                

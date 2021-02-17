@@ -56,12 +56,14 @@ We can Add filters by Time and or Day of the Week, for example lets see whats op
 ```{r, warning=FALSE}
 time = "7:00PM" #format H:MPM
 
+test2 <- open_street %>% drop_na(monday_start)
 open_street %>% drop_na(monday_start) %>% 
   # filter(strptime(monday_start, "%I:%M%p") <= strptime("7:00PM", "%I:%M%p") )%>% 
   # filter(strptime(monday_end, "%I:%M%p") > strptime("7:00PM", "%I:%M%p") )%>%
   leaflet() %>%
   addTiles() %>%
   addPolygons(label = ~on_street)
+
 ```
 
 Or we can filter by neighborhood, for example lets see what is open in Harlem
