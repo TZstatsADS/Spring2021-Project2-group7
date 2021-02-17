@@ -14,13 +14,13 @@ Term: Spring 2021
 
 + **Contribution statement**: ([default](doc/a_note_on_contributions.md)) 
 
-	Eve initialized the user interface and contributed the park function to the app.
+	Eve initialized the user interface and contributed the park and open street functions to the app.
 
 	Peter contributed the restaurant map and the restaurant directory to the app.
 
 	Feng contributed the covid data app and added covid data to the restaurant map.
 
-	Chuyun explored the open streets dataset and contributed the open streets app. 
+	Chuyun contributed the open streets functions to the app. 
 
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
 
