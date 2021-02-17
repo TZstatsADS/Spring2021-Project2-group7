@@ -90,7 +90,7 @@ ny_restaurant_table <- ny_restaurant_map %>%
 
 #Define bins for colors on map
 
-bins <- c(0, 200, 400, 600, 1000, 2000, 4000, 8000, 60000)
+bins <- c(0, 200, 400, 600, 1000, 2000, 4000, 8000, 30000)
 pal <- colorBin(c("red", "orange", "yellow", "green", "blue", 
                   "purple", "violet", "brown", "black"),
                 domain = NULL, bins = bins)
