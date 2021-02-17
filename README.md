@@ -16,7 +16,7 @@ Term: Spring 2021
 
 	Eve initialized the user interface and contributed the park and open street functions to the app.
 
-	Peter contributed the restaurant map and the restaurant directory to the app.
+	Peter initialized the global environment pag and contributed the restaurant map and the restaurant directory to the app.
 
 	Feng contributed the covid data app and added covid data to the restaurant map.
 
