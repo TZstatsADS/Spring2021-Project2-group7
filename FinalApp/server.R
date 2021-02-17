@@ -15,7 +15,8 @@ packages.used=as.list(
   "tidyverse",
   "haven",
   "devtools",
-  "RColorBrewer")
+  "RColorBrewer",
+  "reader")
 )
 check.pkg = function(x){
   if(!require(x, character.only=T)) install.packages(x, 
@@ -56,7 +57,26 @@ open_street <- read.socrata("https://data.cityofnewyork.us/Health/Open-Streets-L
 
 open_street <- sf::st_as_sf(open_street, wkt = "the_geom")
 
+#Covid Overview
 
+data1 <- read_csv("data/Modified_Zip_Code_Tabulation_Areas__MODZCTA_.csv") %>%
+  select(MODZCTA, the_geom)
+
+data2 <- read_csv("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/latest/last7days-by-modzcta.csv") %>%
+  select(modzcta, percentpositivity_7day, people_positive)
+
+data3 <- read_csv("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/totals/data-by-modzcta.csv") %>%
+  select(MODIFIED_ZCTA, COVID_CASE_COUNT, PERCENT_POSITIVE)
+
+data4 <- read_csv("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/totals/antibody-by-modzcta.csv") %>%
+   select(modzcta_first, PERCENT_POSITIVE, NUM_PEOP_POS)
+
+#data1 <- subset(data1, 10000<MODZCTA & MODZCTA<11698)
+covid <- left_join(data1, data2, c('MODZCTA' = 'modzcta'))
+covid <- left_join(covid, data3, c('MODZCTA' = 'MODIFIED_ZCTA'))
+covid <- left_join(covid, data4, c('MODZCTA' = 'modzcta_first')) %>%
+  drop_na_("people_positive")  %>%
+  sf::st_as_sf(wkt = "the_geom")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
@@ -218,20 +238,20 @@ shinyServer(function(input, output) {
     
     #COVID data --------------------------------------------------------------------------
     
-  data1 <- read_csv("data/Modified_Zip_Code_Tabulation_Areas__MODZCTA_.csv") %>%
-    select(MODZCTA, the_geom)
-  data2 <- read_csv("data/last7days-by-modzcta.csv") %>%
-    select(modzcta, percentpositivity_7day, people_positive)
-  data3 <- read_csv("data/data-by-modzcta.csv") %>%
-    select(MODIFIED_ZCTA, COVID_CASE_COUNT, PERCENT_POSITIVE)
-  data4 <- read_csv("data/antibody-by-modzcta.csv") %>%
-    select(modzcta_first, PERCENT_POSITIVE, NUM_PEOP_POS)
-  #data1 <- subset(data1, 10000<MODZCTA & MODZCTA<11698)
-  covid <- left_join(data1, data2, c('MODZCTA' = 'modzcta'))
-  covid <- left_join(covid, data3, c('MODZCTA' = 'MODIFIED_ZCTA'))
-  covid <- left_join(covid, data4, c('MODZCTA' = 'modzcta_first')) %>%
-    drop_na_("people_positive")  %>%
-    sf::st_as_sf(wkt = "the_geom")
+  # data1 <- read_csv("data/Modified_Zip_Code_Tabulation_Areas__MODZCTA_.csv") %>%
+  #   select(MODZCTA, the_geom)
+  # data2 <- read_csv("data/last7days-by-modzcta.csv") %>%
+  #   select(modzcta, percentpositivity_7day, people_positive)
+  # data3 <- read_csv("data/data-by-modzcta.csv") %>%
+  #   select(MODIFIED_ZCTA, COVID_CASE_COUNT, PERCENT_POSITIVE)
+  # data4 <- read_csv("data/antibody-by-modzcta.csv") %>%
+  #   select(modzcta_first, PERCENT_POSITIVE, NUM_PEOP_POS)
+  # #data1 <- subset(data1, 10000<MODZCTA & MODZCTA<11698)
+  # covid <- left_join(data1, data2, c('MODZCTA' = 'modzcta'))
+  # covid <- left_join(covid, data3, c('MODZCTA' = 'MODIFIED_ZCTA'))
+  # covid <- left_join(covid, data4, c('MODZCTA' = 'modzcta_first')) %>%
+  #   drop_na_("people_positive")  %>%
+  #   sf::st_as_sf(wkt = "the_geom")
     
     bins_7 <- c(0, 10, 20, 50, 100, 150, 200, 250, 300, Inf)
     bins_t <- c(0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, Inf)
