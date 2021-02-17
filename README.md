@@ -16,6 +16,8 @@ Term: Spring 2021
 
 + **Contribution statement**: ([default](doc/a_note_on_contributions.md)) 
 
+	All team members approve our work presented in this GitHub repository including this contribution statement.
+
 	Eve initialized the user interface and contributed the park and open street functions to the app.
 
 	Peter contributed the restaurant map and the restaurant directory to the app.
