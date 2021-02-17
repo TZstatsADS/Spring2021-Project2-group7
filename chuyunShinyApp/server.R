@@ -38,14 +38,11 @@ ny_open_street_map <- read.socrata("https://data.cityofnewyork.us/Health/Open-St
 
 server <- function(input, output) {
   
-  #Get dataset to use map
-  
   ny_open_street_map <- ny_open_street_map %>% 
-    drop_na_(start_time)%>%
-    filter(ny_open_street_map_borough %in% input$Borough)
-     
+    drop_na_("start_time")
   
-  bins <- c(0, 200, 400, 600, 1000, 2000, 4000, 8000, 12000, 30000, Inf)
+     
+  bins <- c(0, 200, 400, 600, 1000, 2000, 4000, 8000, 12000, 30000)
   pal <- colorBin(c("red", "orange", "yellow", "green", "blue", 
                     "purple", "violet", "brown", "gray", "black"),
                   domain = NULL, bins = bins)
@@ -59,6 +56,7 @@ server <- function(input, output) {
   #output the map in the server
   output$map <- renderLeaflet({
     ny_map <- leaflet(options = leafletOptions(minZoom = 5, maxZoom = 18)) %>%
+      setView(-73.99, lat = 40.75, zoom = 10) %>%
       addTiles() %>%
       addLegend(title = "Open Streets Area (in sq. ft.)", position = "topleft",
                 colors = c("red",
@@ -70,9 +68,10 @@ server <- function(input, output) {
                            "401 to 600", "601 to 1000",
                            "1001 to 2000", "2001 to 4000",
                            "4001 to 8000", "8001 to 12000",
-                           "12001 to 30000","30001 to Inf"))
+                           "12001 to 30000"))
   })
 }
 
 # Run the application 
 #shinyApp(ui = ui, server = server)
+
