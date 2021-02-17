@@ -99,10 +99,10 @@ shinyUI(
                                  tags$a(href="https://data.cityofnewyork.us/dataset/Social-Distancing-Parks-Crowds-Data/gyrw-gvqc", "View the Maintenance and Operations Staff Encounter Dataset Here"), tags$br(),
                                  tags$a(href="https://data.cityofnewyork.us/City-Government/Social-Distancing-Citywide-Ambassador-Data/akzx-fghb", "View the Park Ambassador Encounter Dataset Here"), tags$br()
                                  
-                                 h2( &quot; COVID-19 Overview &quot; ),
+                                 h2("COVID-19 Overview"),
                                  
-                                 p(&quot;This was created with the COVID-19: Data available through NYC Department of Health. It constantly tracks the COVID-19 related data through all boroughs of New York City. This app focuses on the total number of confirmed cases, number of antibody, as well as the number of positive tests during the pastseven days.”),
-                                 tags$a(href = &quot;https://www1.nyc.gov/site/doh/covid/covid-19-data.page&quot;, &quot;View Dataset Here&quot; )
+                                 p("This was created with the COVID-19: Data available through NYC Department of Health. It constantly tracks the COVID-19 related data through all boroughs of New York City. This app focuses on the total number of confirmed cases, number of antibody, as well as the number of positive tests during the pastseven days.”),
+                                 tags$a(href = "https://www1.nyc.gov/site/doh/covid/covid-19-data.page", "View Dataset Here", tags$br)
                                  h1("Tutorials Used")
                                  
                                  h2("Shiny App Tutorials")
