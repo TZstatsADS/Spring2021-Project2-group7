@@ -1,21 +1,54 @@
 
-packages.used=as.list(
-  c(
-    "shiny",
-    "leaflet",
-    "RSocrata",
-    "tidyverse",
-    "haven",
-    "devtools",
-    "RColorBrewer",
-    "reader")
-)
-check.pkg = function(x){
-  if(!require(x, character.only=T)) install.packages(x, 
-                                                     character.only=T,
-                                                     dependence=T)
+#packages.used=as.list(
+#  c(
+#    "shiny",
+#    "leaflet",
+#    "RSocrata",
+#    "tidyverse",
+#    "haven",
+#    "devtools",
+#    "RColorBrewer",
+#    "reader")
+#)
+#check.pkg = function(x){
+#  if(!require(x, character.only=T)) install.packages(x, 
+#                                                     character.only=T,
+#                                                     dependence=T)
+#}
+#lapply(packages.used, check.pkg)
+
+if (!require("shiny")) {
+  install.packages("shiny",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(shiny)
 }
-lapply(packages.used, check.pkg)
+if (!require("leaflet")) {
+  install.packages("leaflet",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(leaflet)
+}
+if (!require("RSocrata")) {
+  install.packages("RSocrata",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(RSocrata)
+}
+if (!require("tidyverse")) {
+  install.packages("tidyverse",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(tidyverse)
+}
+if (!require("haven")) {
+  install.packages("haven",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(haven)
+}
+if (!require("devtools")) {
+  install.packages("devtools",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(devtools)
+}
+if (!require("RColorBrewer")) {
+  install.packages("RColorBrewer",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(RColorBrewer)
+}
+if (!require("reader")) {
+  install.packages("reader",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(reader)
+}
 
 
 #resturant Data 
