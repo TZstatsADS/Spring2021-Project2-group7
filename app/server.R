@@ -40,13 +40,12 @@ shinyServer(function(input, output) {
                       colors = c("red",
                                  "orange", "yellow", 
                                  "green", "blue", 
-                                 "purple", "violet", 
+                                 "purple", 
                                  "brown", "black"), 
-                      labels = c("0 to 200", "201 to 400",
-                                 "401 to 600", "601 to 1000",
-                                 "1001 to 2000", "2001 to 4000",
-                                 "4001 to 8000", "8001 to 12000",
-                                 "12001 to 60000"))
+                      labels = c("0 to 199", "200 to 399",
+                                 "400 to 599", "600 to 999",
+                                 "1000 to 1999", "2000 to 3999",
+                                 "4000 to 7999", "8000 and up"))
     })
   
     output$restaurant_table <- renderDataTable(ny_restaurant_table)
