@@ -152,21 +152,21 @@ covid <- left_join(covid, data4, c('MODZCTA' = 'modzcta_first')) %>%
 
 
 # Define bins, colors, and labels for Covid Data
-bins_7 <- c(0, 10, 20, 50, 100, 150, 200, 250, 300, Inf)
-bins_t <- c(0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, Inf)
-bins_a <- c(0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000, Inf)
-pal_7 <- colorBin("YlOrRd", domain = covid$people_positive, bins = bins_7)
-pal_t <- colorBin("YlOrRd", domain = covid$COVID_CASE_COUNT, bins = bins_t)
-pal_a <- colorBin("YlOrRd", domain = covid$NUM_PEOP_POS, bins = bins_a)
+bins_7 <- c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20)
+bins_t <- c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20)
+bins_a <- c(0, 10, 20, 30, 40, 50)
+pal_7 <- colorBin("YlOrRd", domain = covid$percentpositivity_7day, bins = bins_7)
+pal_t <- colorBin("YlOrRd", domain = covid$PERCENT_POSITIVE, bins = bins_t)
+pal_a <- colorBin("YlOrRd", domain = covid$PERCENT_POSITIVE, bins = bins_a)
 label_7 <- sprintf(
-  "Zip: <strong>%s</strong><br/>%g people tested positive",
+  "Zip: <strong>%s</strong><br/>%g % people tested positive",
   covid$MODZCTA, covid$people_positive
 ) %>% lapply(htmltools::HTML)
 label_t <- sprintf(
-  "Zip: <strong>%s</strong><br/>%g people tested positive",
+  "Zip: <strong>%s</strong><br/>%g % people tested positive",
   covid$MODZCTA, covid$COVID_CASE_COUNT
 ) %>% lapply(htmltools::HTML)
 label_a <- sprintf(
-  "Zip: <strong>%s</strong><br/>%g people tested positive",
+  "Zip: <strong>%s</strong><br/>%g % people tested positive",
   covid$MODZCTA, covid$NUM_PEOP_POS
 ) %>% lapply(htmltools::HTML)
