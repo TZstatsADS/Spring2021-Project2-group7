@@ -136,7 +136,7 @@ shinyServer(function(input, output) {
       recent_map <- leaflet(data = covid) %>%
         addProviderTiles(providers$CartoDB.Positron)%>%
         addPolygons(fillOpacity = 0.9, weight = 2, opacity = 1, color = 'white', dashArray = '3',
-                    fillColor = ~pal_7(people_positive), 
+                    fillColor = ~pal_7(percentpositivity_7day), 
                     highlight = highlightOptions(
                       weight = 5,
                       color = "#666",
@@ -148,7 +148,7 @@ shinyServer(function(input, output) {
                       style = list("font-weight" = "normal", padding = "3px 8px"),
                       textsize = "15px",
                       direction = "auto")) %>%
-        addLegend(pal = pal_7, values = ~people_positive, opacity = 1.0)
+        addLegend(pal = pal_7, values = ~percentpositivity_7day, opacity = 1.0)
     })
     
     
