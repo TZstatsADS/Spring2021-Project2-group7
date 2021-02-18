@@ -56,7 +56,7 @@ shinyUI(
                                         p(strong("Common Courtesy."), "When inside the restaurant making your order, be sure to wear a mask."),
                                 
                                     h3("Open Streets"),
-                                        p("@chuyun"),
+                                        p("Open streets are the streets that opened daily for New York's pedestrians and cyclists to use the roadbed of the street for social distancing during the COVID-19 crisis. This aims to avoid people walking too close to each other to speed up spreading the COVID-19."),
                                  
                                     h3("Parks"), 
                                          p("Parks can be a great place for a variety of activities, to name a few:" ),
