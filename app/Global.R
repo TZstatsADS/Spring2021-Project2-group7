@@ -159,14 +159,14 @@ pal_7 <- colorBin("YlOrRd", domain = covid$percentpositivity_7day, bins = bins_7
 pal_t <- colorBin("YlOrRd", domain = covid$PERCENT_POSITIVE, bins = bins_t)
 pal_a <- colorBin("YlOrRd", domain = covid$PERCENT_ANTI, bins = bins_a)
 label_7 <- sprintf(
-  "Zip: <strong>%s</strong><br/>%g % people tested positive",
+  "Zip: <strong>%s</strong><br/>%g percent of people tested positive",
   covid$MODZCTA, covid$percentpositivity_7day
 ) %>% lapply(htmltools::HTML)
 label_t <- sprintf(
-  "Zip: <strong>%s</strong><br/>%g % people tested positive",
+  "Zip: <strong>%s</strong><br/>%g percent of people tested positive",
   covid$MODZCTA, covid$PERCENT_POSITIVE
 ) %>% lapply(htmltools::HTML)
 label_a <- sprintf(
-  "Zip: <strong>%s</strong><br/>%g % people tested positive",
+  "Zip: <strong>%s</strong><br/>%g percent of  people tested positive",
   covid$MODZCTA, covid$PERCENT_ANTI
 ) %>% lapply(htmltools::HTML)
