@@ -16,9 +16,9 @@ Term: Spring 2021
 
 + **Contribution statement**: ([default](doc/a_note_on_contributions.md)) 
 
-	Eve initialized the user interface and contributed the park and open street functions to the app.
+	Eve designed the user interface and contributed the park and open street functions to the app.
 
-	Peter initialized the global environment pag and contributed the restaurant map and the restaurant directory to the app.
+	Peter initialized the global environment page and contributed the restaurant map and the restaurant directory to the app.
 
 	Feng contributed the covid data app and added covid data to the restaurant map.
 
