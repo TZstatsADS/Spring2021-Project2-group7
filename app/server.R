@@ -31,7 +31,7 @@ shinyServer(function(input, output) {
             addCircles(lng = shiny_restaurants()$longitude,
                        lat = shiny_restaurants()$latitude, 
                        label = sprintf(
-                   "<strong>%s</strong><br/>%s recent positive cases in zip code<br/>%s<br/>%g sq.ft. of dining<br/>%s %g",
+                   "<strong>%s</strong><br/>%s percent recent positive cases in zip code<br/>%s<br/>%g sq.ft. of dining<br/>%s %g",
                    shiny_restaurants()$restaurant_name,  shiny_restaurants()$people_positive, shiny_restaurants()$seating_interest_sidewalk,
                    shiny_restaurants()$area, shiny_restaurants()$business_address,  shiny_restaurants()$zip) %>% 
                    lapply(htmltools::HTML),
