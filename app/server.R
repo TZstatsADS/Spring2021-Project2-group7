@@ -138,7 +138,7 @@ shinyServer(function(input, output) {
         total_map <- leaflet(data = covid) %>%
             addProviderTiles(providers$CartoDB.Positron)%>%
             addPolygons(fillOpacity = 0.9, weight = 2, opacity = 1, color = 'white', dashArray = '3',
-                        fillColor = ~pal_t(COVID_CASE_COUNT), 
+                        fillColor = ~pal_t(PERCENT_POSITIVE), 
                         highlight = highlightOptions(
                             weight = 5,
                             color = "#666",
@@ -150,7 +150,7 @@ shinyServer(function(input, output) {
                             style = list("font-weight" = "normal", padding = "3px 8px"),
                             textsize = "15px",
                             direction = "auto")) %>%
-            addLegend(pal = pal_t, values = ~COVID_CASE_COUNT, opacity = 1.0)
+            addLegend(pal = pal_t, values = ~PERCENT_POSITIVE, opacity = 1.0)
     })
     
     
@@ -158,7 +158,7 @@ shinyServer(function(input, output) {
         antibody_map <- leaflet(data = covid) %>%
             addProviderTiles(providers$CartoDB.Positron)%>%
             addPolygons(fillOpacity = 0.9, weight = 2, opacity = 1, color = 'white', dashArray = '3',
-                        fillColor = ~pal_a(NUM_PEOP_POS), 
+                        fillColor = ~pal_a(PERCENT_ANTI), 
                         highlight = highlightOptions(
                             weight = 5,
                             color = "#666",
@@ -170,7 +170,7 @@ shinyServer(function(input, output) {
                             style = list("font-weight" = "normal", padding = "3px 8px"),
                             textsize = "15px",
                             direction = "auto")) %>%
-            addLegend(pal = pal_a, values = ~NUM_PEOP_POS, opacity = 1.0)
+            addLegend(pal = pal_a, values = ~PERCENT_ANTI, opacity = 1.0)
     })
 
 })

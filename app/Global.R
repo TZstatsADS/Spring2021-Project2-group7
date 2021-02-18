@@ -141,9 +141,9 @@ data3 <- read_csv("https://raw.githubusercontent.com/nychealth/coronavirus-data/
   select(MODIFIED_ZCTA, COVID_CASE_COUNT, PERCENT_POSITIVE)
 
 data4 <- read_csv("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/totals/antibody-by-modzcta.csv") %>%
-  select(modzcta_first, PERCENT_POSITIVE, NUM_PEOP_POS)
+  select(modzcta_first, PERCENT_POSITIVE, NUM_PEOP_POS)  %>%
+  rename(PERCENT_ANTI = PERCENT_POSITIVE)
 
-#data1 <- subset(data1, 10000<MODZCTA & MODZCTA<11698)
 covid <- left_join(data1, data2, c('MODZCTA' = 'modzcta'))
 covid <- left_join(covid, data3, c('MODZCTA' = 'MODIFIED_ZCTA'))
 covid <- left_join(covid, data4, c('MODZCTA' = 'modzcta_first')) %>%
@@ -157,16 +157,16 @@ bins_t <- c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20)
 bins_a <- c(0, 10, 20, 30, 40, 50)
 pal_7 <- colorBin("YlOrRd", domain = covid$percentpositivity_7day, bins = bins_7)
 pal_t <- colorBin("YlOrRd", domain = covid$PERCENT_POSITIVE, bins = bins_t)
-pal_a <- colorBin("YlOrRd", domain = covid$PERCENT_POSITIVE, bins = bins_a)
+pal_a <- colorBin("YlOrRd", domain = covid$PERCENT_ANTI, bins = bins_a)
 label_7 <- sprintf(
   "Zip: <strong>%s</strong><br/>%g % people tested positive",
-  covid$MODZCTA, covid$people_positive
+  covid$MODZCTA, covid$percentpositivity_7day
 ) %>% lapply(htmltools::HTML)
 label_t <- sprintf(
   "Zip: <strong>%s</strong><br/>%g % people tested positive",
-  covid$MODZCTA, covid$COVID_CASE_COUNT
+  covid$MODZCTA, covid$PERCENT_POSITIVE
 ) %>% lapply(htmltools::HTML)
 label_a <- sprintf(
   "Zip: <strong>%s</strong><br/>%g % people tested positive",
-  covid$MODZCTA, covid$NUM_PEOP_POS
+  covid$MODZCTA, covid$PERCENT_ANTI
 ) %>% lapply(htmltools::HTML)
